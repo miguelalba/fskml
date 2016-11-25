@@ -12,7 +12,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="pmfml" />
     <orderEntry type="library" name="Maven: de.unirostock.sems:CombineArchive:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: de.binfalse:BFLog:1.3.3" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
@@ -48,7 +47,5 @@
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.9" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.0.3" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.5" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.5" level="project" />
   </component>
 </module>
