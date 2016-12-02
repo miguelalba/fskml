@@ -16,6 +16,12 @@
  *******************************************************************************/
 package de.bund.bfr.fskml;
 
+import de.unirostock.sems.cbarchive.ArchiveEntry;
+import org.apache.commons.io.IOUtils;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLReader;
+
+import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,72 +29,8 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.apache.commons.io.IOUtils;
-import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLReader;
-
-import de.unirostock.sems.cbarchive.ArchiveEntry;
-import de.unirostock.sems.cbarchive.CombineArchive;
-
 // Stuff that should be moved into separated classes
 public class Util {
-
-	/**
-	 * Reads model script from an already opened CombineArchive.
-	 * 
-	 * @return the model script. Null if model script is not set.
-	 * @throws IOException
-	 */
-	public static String readModelScript(final CombineArchive archive) throws IOException {
-
-		RMetaDataNode node = new RMetaDataNode(archive.getDescriptions().get(0).getXmlDescription());
-
-		if (node.getMainScript() != null) {
-			ArchiveEntry entry = archive.getEntry(node.getMainScript());
-			return loadScriptFromEntry(entry);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Reads parameters script from an already opened CombineArchive.
-	 * 
-	 * @return the model script. null if the parameters script is not set.
-	 * @throws IOException
-	 */
-	public static String readParametersScript(final CombineArchive archive) throws IOException {
-
-		RMetaDataNode node = new RMetaDataNode(archive.getDescriptions().get(0).getXmlDescription());
-
-		if (node.getParametersScript() != null) {
-			ArchiveEntry entry = archive.getEntry(node.getParametersScript());
-			return loadScriptFromEntry(entry);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Reads visualization script from an already opened CombineArchive.
-	 * 
-	 * @return the parameters script. null if the visualization script is not
-	 *         set.
-	 * @throws IOException
-	 */
-	public static String readVisualizationScript(final CombineArchive archive) throws IOException {
-
-		RMetaDataNode node = new RMetaDataNode(archive.getDescriptions().get(0).getXmlDescription());
-
-		if (node.getVisualizationScript() != null) {
-			ArchiveEntry entry = archive.getEntry(node.getVisualizationScript());
-			return loadScriptFromEntry(entry);
-		}
-
-		return null;
-	}
 
 	public SBMLDocument readMetaData(final ArchiveEntry entry) throws IOException, XMLStreamException {
 
