@@ -16,6 +16,8 @@
  *******************************************************************************/
 package de.bund.bfr.fskml;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -23,8 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.google.common.io.Files;
 
 public class RScript {
 	private final String script;
@@ -34,14 +34,14 @@ public class RScript {
 	/**
 	 * Process R script.
 	 * 
-	 * @param file.
+	 * @param file
 	 * @throws IOException
 	 *             if the file specified by path cannot be read.
 	 */
 	public RScript(final File file) throws IOException {
 
 		// throws IOException
-		String fileContents = Files.toString(file, StandardCharsets.UTF_8); 
+		String fileContents = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
 		// If no errors are thrown, proceed to extract libraries and sources
 		final String[] lines = fileContents.split("\\r?\\n");
