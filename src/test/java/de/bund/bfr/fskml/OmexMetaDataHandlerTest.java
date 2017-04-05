@@ -5,12 +5,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class LegacyOmexMetaDataHandlerTest {
+public class OmexMetaDataHandlerTest {
 
     @Test
     public void testModelScript() {
         // Creates new handler with model script name
-        LegacyOmexMetaDataHandler handler = new LegacyOmexMetaDataHandler();
+        OmexMetaDataHandler handler = new OmexMetaDataHandler();
         handler.setModelScript("model.r");
 
         // Checks getModelScript
@@ -24,7 +24,7 @@ public class LegacyOmexMetaDataHandlerTest {
     @Test
     public void testParamScript() {
         // Creates new handler with param script name
-        LegacyOmexMetaDataHandler handler = new LegacyOmexMetaDataHandler();
+        OmexMetaDataHandler handler = new OmexMetaDataHandler();
         handler.setParametersScript("param.r");
 
         // Checks getParametersScript
@@ -38,7 +38,7 @@ public class LegacyOmexMetaDataHandlerTest {
     @Test
     public void testVisualizationScript() {
         // Creates new handler with visualization script name
-        LegacyOmexMetaDataHandler handler = new LegacyOmexMetaDataHandler();
+        OmexMetaDataHandler handler = new OmexMetaDataHandler();
         handler.setVisualizationScript("viz.r");
 
         // Checks getVisualizationScript
@@ -52,7 +52,7 @@ public class LegacyOmexMetaDataHandlerTest {
     @Test
     public void testWorkspace() {
         // Creates new handler with workspace
-        LegacyOmexMetaDataHandler handler = new LegacyOmexMetaDataHandler();
+        OmexMetaDataHandler handler = new OmexMetaDataHandler();
         handler.setWorkspaceFile("workspace.r");
 
         // Checks getWorkspace

@@ -8,9 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * OMEX MetaData handler using Dublin Core annotations.
+ * Keeps the names of the R scripts:
+ *
+ * <ul>
+ *     <li>main script</li>
+ *     <li>visualization script</li>
+ *     <li>parameters script</li>
+ *     <li>workspace file</li>
+ * </ul>
+ *
+ * @author Miguel de Alba
  */
-public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
+public class OmexMetaDataHandler {
 
     private Element modelElement;
     private Element paramElement;
@@ -22,10 +31,10 @@ public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
 
     private enum ResourceType {modelScript, parametersScript, visualizationScript, workspace}
 
-    public DCOmexMetaDataHandler() {
+    public OmexMetaDataHandler() {
     }
 
-    public DCOmexMetaDataHandler(final List<Element> elements) {
+    public OmexMetaDataHandler(final List<Element> elements) {
         for (final Element element : elements) {
             ResourceType type = ResourceType.valueOf(element.getChildText("type", dcNamespace));
 
@@ -46,12 +55,12 @@ public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
         }
     }
 
-    @Override
+    /** @return null if not set */
     public String getModelScript() {
         return modelElement == null ? null : modelElement.getChildText("source", dcNamespace);
     }
 
-    @Override
+    /** @param script R model script. */
     public void setModelScript(final String script) {
         if (modelElement == null) {
             Element typeNode = factory.element("type", dcNamespace);
@@ -68,12 +77,12 @@ public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
         }
     }
 
-    @Override
+    /** @return null if the parameters script is not set. */
     public String getParametersScript() {
         return paramElement == null ? null : paramElement.getChildText("source", dcNamespace);
     }
 
-    @Override
+    /** @param script R parameters script. */
     public void setParametersScript(final String script) {
         if (paramElement == null) {
             Element typeNode = factory.element("type", dcNamespace);
@@ -90,12 +99,12 @@ public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
         }
     }
 
-    @Override
+    /** @return null if the visualization script is not set. */
     public String getVisualizationScript() {
         return vizElement == null ? null : vizElement.getChildText("source", dcNamespace);
     }
 
-    @Override
+    /** @param script R visualization script. */
     public void setVisualizationScript(final String script) {
         if (vizElement == null) {
             Element typeNode = factory.element("type", dcNamespace);
@@ -112,11 +121,12 @@ public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
         }
     }
 
-    @Override
+    /** @return null if the workspace file is not set. */
     public String getWorkspaceFile() {
         return workspaceElement == null ? null : workspaceElement.getChildText("source", dcNamespace);
     }
 
+    /** @param file R workspace file. */
     public void setWorkspaceFile(final String file) {
         if (workspaceElement == null) {
             Element typeNode = factory.element("type", dcNamespace);
@@ -133,7 +143,6 @@ public class DCOmexMetaDataHandler implements OmexMetaDataHandlerI {
         }
     }
 
-    @Override
     public List<Element> getElements() {
         List<Element> elements = new ArrayList<>(4);
         if (modelElement != null) {
