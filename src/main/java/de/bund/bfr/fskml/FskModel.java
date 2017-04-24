@@ -5,14 +5,36 @@ package de.bund.bfr.fskml;
  */
 public class FskModel {
 
-    public final String modelScript;
-    public final String parametersScript;
-    public final String visualizationScript;
+    /**
+     * Model script.
+     */
+    public String model;
 
-    public FskModel(final String modelScript, final String parametersScript,
-                    final String visualizationScript) {
-        this.modelScript = modelScript;
-        this.parametersScript = parametersScript;
-        this.visualizationScript = visualizationScript;
+    /**
+     * Parameters script.
+     */
+    public String param;
+
+    /**
+     * Visualization script.
+     */
+    public String viz;
+
+    /**
+     * Model meta data.
+     */
+    public FskMetaData template;
+
+    public FskModel(final String model, final String param,
+                    final String viz, final FskMetaData template) {
+        this.model = model;
+        this.param = param;
+        this.viz = viz;
+        this.template = template;
+    }
+
+    @Override
+    public String toString() {
+        return template == null ? "" : template.modelId;
     }
 }
