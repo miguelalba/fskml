@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2017 Federal Institute for Risk Assessment (BfR), Germany
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contributors: Department Biological Safety - BfR
+ *******************************************************************************/
 package de.bund.bfr.fskml;
 
 import de.bund.bfr.fskml.FskMetaData.DataType;
@@ -90,13 +106,13 @@ public class FskMetaDataTest {
         fmd.hasData = false;
 
         // equals with same object should return true
-        assertTrue(fmd.equals(fmd));
+        assertEquals(fmd, fmd);
 
         // equals with null should return false
-        assertFalse(fmd.equals(null));
+        assertNotEquals(fmd, null);
 
         // equals with a different class object should return false
-        assertFalse(fmd.equals(new Integer(0)));
+        assertNotEquals(fmd, 0);
 
         // equals with matching
         FskMetaData fmd2 = new FskMetaData();
@@ -127,122 +143,122 @@ public class FskMetaDataTest {
 
         // equals with different model name
         fmd2.modelName = "other model name";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.modelName = fmd.modelName;
 
         // equals with different model id
         fmd2.modelId = "other model id";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.modelId = fmd.modelId;
 
         // equals with different model link
         fmd2.modelLink = "other model link";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.modelLink = fmd.modelLink;
 
         // equals with different organism
         fmd2.organism = "other organism";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.organism = fmd.organism;
 
         // equals with different organism details
         fmd2.organismDetails = "other organism details";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.organismDetails = fmd.organismDetails;
 
         // equals with different matrix
         fmd2.matrix = "other matrix";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.matrix = fmd.matrix;
 
         // equals with different matrix details
         fmd2.matrixDetails = "other matrix details";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.matrixDetails = fmd.matrixDetails;
 
         // equals with different creator
         fmd2.creator = "other creator";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.creator = fmd.creator;
 
         // equals with different family name
         fmd2.familyName = "other family name";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.familyName = fmd.familyName;
 
         // equals with different contact
         fmd2.contact = "other contact";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.contact = fmd.contact;
 
         // equals with different software
         fmd2.software = FskMetaData.Software.Matlab;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.software = fmd.software;
 
         // equals with different reference description
         fmd2.referenceDescription = "a reference description";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.referenceDescription = fmd.referenceDescription;
 
         // equals with different reference description link
         fmd2.referenceDescriptionLink = "http://mynameisralph.com";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.referenceDescriptionLink = fmd.referenceDescriptionLink;
 
         // equals with different created date
         fmd2.createdDate = null;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.createdDate = fmd.createdDate;
 
         // equals with different modified date
         fmd2.modifiedDate = null;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.modifiedDate = fmd.modifiedDate;
 
         // equals with different rights
         fmd2.rights = "other rights";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.rights = fmd.rights;
 
         // equals with different notes
         fmd2.notes = "other notes";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.notes = fmd.notes;
 
         // equals with different curated status
         fmd2.curated = !fmd.curated;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.curated = fmd.curated;
 
         // equals with different type
         fmd2.type = ModelType.MANUAL_TERTIARY_MODEL;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.type = fmd.type;
 
         // equals with different subject
         fmd2.subject = ModelClass.AW;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.subject = fmd.subject;
 
         // equals with different food process
         fmd2.foodProcess = "other process";
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.foodProcess = fmd.foodProcess;
 
         // equals with dependent variable
         fmd2.dependentVariables = null;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.dependentVariables = fmd.dependentVariables;
 
         // equals with independent variables
         fmd2.independentVariables = null;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.independentVariables = fmd.independentVariables;
 
         // equals with different has data
         fmd2.hasData = !fmd.hasData;
-        assertFalse(fmd2.equals(fmd));
+        assertNotEquals(fmd2, fmd);
         fmd2.hasData = !fmd.hasData;
     }
 

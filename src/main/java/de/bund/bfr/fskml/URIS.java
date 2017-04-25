@@ -1,5 +1,4 @@
-/*
- ***************************************************************************************************
+/**************************************************************************************************
  * Copyright (c) 2017 Federal Institute for Risk Assessment (BfR), Germany
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
@@ -14,8 +13,7 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  * Contributors: Department Biological Safety - BfR
- *************************************************************************************************
- */
+ *************************************************************************************************/
 package de.bund.bfr.fskml;
 
 import java.net.URI;
