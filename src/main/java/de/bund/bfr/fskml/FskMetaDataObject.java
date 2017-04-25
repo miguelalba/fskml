@@ -49,6 +49,10 @@ public class FskMetaDataObject {
 
     public final MetaDataObject metaDataObject;
 
+    public FskMetaDataObject(MetaDataObject metaDataObject) {
+        this.metaDataObject = metaDataObject;
+    }
+
     public FskMetaDataObject(ResourceType resourceType) {
 
         Element typeNode = factory.element("type", dcNamespace);
@@ -58,5 +62,10 @@ public class FskMetaDataObject {
         element.addContent(typeNode);
 
         metaDataObject = new DefaultMetaDataObject(element);
+    }
+
+    public ResourceType getResourceType() {
+        String typeString = metaDataObject.getXmlDescription().getChildText("type", dcNamespace);
+        return ResourceType.valueOf(typeString);
     }
 }

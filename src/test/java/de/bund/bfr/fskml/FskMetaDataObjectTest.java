@@ -50,10 +50,8 @@ public class FskMetaDataObjectTest {
                 entry.addDescription(fmdo.metaDataObject);
 
                 assertEquals("/model.r", fmdo.metaDataObject.getAbout());
+                assertEquals(ResourceType.modelScript, fmdo.getResourceType());
 
-                String resourceTypeString = fmdo.metaDataObject.getXmlDescription().getChildText("type",
-                        FskMetaDataObject.dcNamespace);
-                assertEquals(ResourceType.modelScript, ResourceType.valueOf(resourceTypeString));
             }
 
             // Test param script
@@ -65,10 +63,7 @@ public class FskMetaDataObjectTest {
                 entry.addDescription(fmdo.metaDataObject);
 
                 assertEquals("/param.r", fmdo.metaDataObject.getAbout());
-
-                String resourceTypeString = fmdo.metaDataObject.getXmlDescription().getChildText("type",
-                        FskMetaDataObject.dcNamespace);
-                assertEquals(ResourceType.parametersScript, ResourceType.valueOf(resourceTypeString));
+                assertEquals(ResourceType.parametersScript, fmdo.getResourceType());
             }
 
             // Test visualization script
@@ -80,10 +75,7 @@ public class FskMetaDataObjectTest {
                 entry.addDescription(fmdo.metaDataObject);
 
                 assertEquals("/visualization.r", fmdo.metaDataObject.getAbout());
-
-                String resourceTypeString = fmdo.metaDataObject.getXmlDescription().getChildText("type",
-                        FskMetaDataObject.dcNamespace);
-                assertEquals(ResourceType.visualizationScript, ResourceType.valueOf(resourceTypeString));
+                assertEquals(ResourceType.visualizationScript, fmdo.getResourceType());
             }
 
             // Test metadata file
@@ -95,10 +87,7 @@ public class FskMetaDataObjectTest {
                 entry.addDescription(fmdo.metaDataObject);
 
                 assertEquals("/metadata.pmf", fmdo.metaDataObject.getAbout());
-
-                String resourceTypeString = fmdo.metaDataObject.getXmlDescription().getChildText("type",
-                        FskMetaDataObject.dcNamespace);
-                assertEquals(ResourceType.metaData, ResourceType.valueOf(resourceTypeString));
+                assertEquals(ResourceType.metaData, fmdo.getResourceType());
             }
 
             // Test workspace file
@@ -110,10 +99,21 @@ public class FskMetaDataObjectTest {
                 entry.addDescription(fmdo.metaDataObject);
 
                 assertEquals("/workspace.r", fmdo.metaDataObject.getAbout());
+                assertEquals(ResourceType.workspace, fmdo.getResourceType());
+            }
 
-                String resourceTypeString = fmdo.metaDataObject.getXmlDescription().getChildText("type",
-                        FskMetaDataObject.dcNamespace);
-                assertEquals(ResourceType.workspace, ResourceType.valueOf(resourceTypeString));
+            // Test clone
+            {
+                File file = File.createTempFile("workspace", ".r");
+                file.deleteOnExit();
+                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "workspace.r", URIS.r);
+                FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.workspace);
+                entry.addDescription(fmdo.metaDataObject);
+
+                // Test clone
+                FskMetaDataObject clone = new FskMetaDataObject(fmdo.metaDataObject);
+                assertEquals("/workspace.r", clone.metaDataObject.getAbout());
+                assertEquals(ResourceType.workspace, fmdo.getResourceType());
             }
 
         } catch (ParseException | CombineArchiveException | JDOMException e) {
