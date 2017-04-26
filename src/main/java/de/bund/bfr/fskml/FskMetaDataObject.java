@@ -44,7 +44,7 @@ public class FskMetaDataObject {
         workspace
     }
 
-    public static final Namespace dcNamespace = Namespace.getNamespace("dc", "http://purl.org/dc/elements/1.1/");
+    private static final Namespace dcNamespace = Namespace.getNamespace("dc", "http://purl.org/dc/elements/1.1/");
     private static final DefaultJDOMFactory factory = new DefaultJDOMFactory();
 
     public final MetaDataObject metaDataObject;
