@@ -358,22 +358,22 @@ public class MetadataDocument {
         return template;
     }
 
-    public static class MetadataAnnotation {
+    static class MetadataAnnotation {
 
-        public Annotation annotation;
+        Annotation annotation;
 
         // Fields with metadata
-        public String givenName;
-        public String familyName;
-        public String contact;
-        public Date createdDate;
-        public Date modifiedDate;
-        public ModelType type;
-        public String rights;
-        public String referenceDescription;
-        public String referenceDescriptionLink;
+        String givenName;
+        String familyName;
+        String contact;
+        Date createdDate;
+        Date modifiedDate;
+        ModelType type;
+        String rights;
+        String referenceDescription;
+        String referenceDescriptionLink;
 
-        public MetadataAnnotation(final FskMetaData metadata) {
+        MetadataAnnotation(final FskMetaData metadata) {
 
             XMLTriple pmfTriple = new XMLTriple("metadata", "", "pmf");
             XMLNode pmfNode = new XMLNode(pmfTriple);
@@ -438,7 +438,7 @@ public class MetadataDocument {
             this.annotation.setNonRDFAnnotation(pmfNode);
         }
 
-        public MetadataAnnotation(final Annotation annotation) {
+        MetadataAnnotation(final Annotation annotation) {
             XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement("metadata", "");
 
             // Reads creatorNode
