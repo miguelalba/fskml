@@ -58,8 +58,8 @@ public class MetadataDocumentTest {
 
     @Test
     public void testRuleAnnotation() {
-        RuleAnnotation annot1 = new RuleAnnotation(ModelClass.UNKNOWN);
+        RuleAnnotation annot1 = new RuleAnnotation(ModelClass.UNKNOWN.fullName());
         RuleAnnotation annot2 = new RuleAnnotation(annot1.annotation);
-        assertEquals(ModelClass.UNKNOWN, annot2.modelClass);
+        assertEquals(ModelClass.UNKNOWN, ModelClass.fromName(annot2.getModelClass()));
     }
 }

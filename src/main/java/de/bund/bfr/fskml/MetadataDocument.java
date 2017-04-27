@@ -232,7 +232,7 @@ public class MetadataDocument {
             // first parameter of the model
             rule.setVariable(model.getParameter(0).getId());
 
-            ModelClass modelClass = template.subject == null ? ModelClass.UNKNOWN : template.subject;
+            String modelClass = template.subject == null ? ModelClass.UNKNOWN.fullName() : template.subject.fullName();
             rule.setAnnotation(new RuleAnnotation(modelClass).annotation);
             model.addRule(rule);
         }
@@ -338,7 +338,8 @@ public class MetadataDocument {
 
         if (model.getNumRules() > 0) {
             AssignmentRule rule = (AssignmentRule) model.getRule(0);
-            template.subject = new RuleAnnotation(rule.getAnnotation()).modelClass;
+            String modelClassString = new RuleAnnotation(rule.getAnnotation()).getModelClass();
+            template.subject = ModelClass.valueOf(modelClassString);
         }
 
         // model notes
@@ -565,40 +566,37 @@ public class MetadataDocument {
      */
     static class RuleAnnotation {
 
-        final ModelClass modelClass;
         final Annotation annotation;
 
-        RuleAnnotation(final ModelClass modelClass) {
+        /**
+         * @param modelClass Empty string if missing
+         */
+        RuleAnnotation(final String modelClass) {
             // Builds metadata node
             XMLTriple pmfTriple = new XMLTriple("metadata", null, "pmf");
             XMLNode pmfNode = new XMLNode(pmfTriple);
 
             // Builds model class node
-            XMLTriple modelClassTriple = new XMLTriple("subject", null, "pmmlab");
-            XMLNode modelClassNode = new XMLNode(modelClassTriple);
-            modelClassNode.addChild(new XMLNode(modelClass.fullName()));
+            XMLNode modelClassNode = new XMLNode(new XMLTriple("subject", null, "pmmlab"));
+            modelClassNode.addChild(new XMLNode(modelClass));
             pmfNode.addChild(modelClassNode);
 
             // Create annotation
             this.annotation = new Annotation();
             this.annotation.setNonRDFAnnotation(pmfNode);
-
-            // Copies modelClass
-            this.modelClass = modelClass;
         }
 
         RuleAnnotation(final Annotation annotation) throws IllegalArgumentException {
-
-            XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement("metadata", "");
-
-            // Reads model class node
-            XMLNode modelClassNode = pmfNode.getChildElement("subject", "");
-            if (modelClassNode == null)
-                throw new IllegalArgumentException("Annotation does not contain a ModelClass");
-            this.modelClass = ModelClass.fromName(modelClassNode.getChild(0).getCharacters());
-
-            // Copies annotation
             this.annotation = annotation;
+        }
+
+        /**
+         * @return model class
+         */
+        String getModelClass() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "").getChildElement
+                    ("subject", "");
+            return node.getChild(0).getCharacters();
         }
     }
 }
