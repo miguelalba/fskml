@@ -360,37 +360,6 @@ public class MetadataDocument {
 
     public static class MetadataAnnotation {
 
-        private static final String METADATA_TAG = "metadata"; // Metadata tag
-        private static final String METADATA_NS = "pmf"; // Metadata namespace
-
-        // Namespace and tag for the creator: <dc:creator>
-        private final static String CREATOR_NS = "dc";
-        private final static String CREATOR_TAG = "creator";
-
-        // Namespace and tag for the created date: <dcterms:created>
-        private final static String CREATED_NS = "dcterms";
-        private final static String CREATED_TAG = "created";
-
-        // Namespace and tag for the modified date: <dcterms:modified>
-        private final static String MODIFIED_NS = "dcterms";
-        private final static String MODIFIED_TAG = "modified";
-
-        // Namespace and tag for the type: <dc:type>
-        private final static String TYPE_NS = "dc";
-        private final static String TYPE_TAG = "type";
-
-        // Namespace and tag for the rights: <dc:rights>
-        private final static String RIGHTS_NS = "dc";
-        private final static String RIGHTS_TAG = "rights";
-
-        // Namespace and tag for the reference description: <dc:description>
-        private final static String REFDESC_NS = "dc";
-        private final static String REFDESC_TAG = "description";
-
-        // Namespace and tag for the reference description link: <dc:source>
-        private final static String REFDESCLINK_NS = "dc";
-        private final static String REFDESCLINK_TAG = "source";
-
         public Annotation annotation;
 
         // Fields with metadata
@@ -406,7 +375,7 @@ public class MetadataDocument {
 
         public MetadataAnnotation(final FskMetaData metadata) {
 
-            XMLTriple pmfTriple = new XMLTriple(METADATA_TAG, "", METADATA_NS);
+            XMLTriple pmfTriple = new XMLTriple("metadata", "", "pmf");
             XMLNode pmfNode = new XMLNode(pmfTriple);
 
             // Builds creator node
@@ -417,49 +386,49 @@ public class MetadataDocument {
                 this.contact = StringUtils.defaultString(metadata.contact);
 
                 String creator = this.givenName + "." + this.familyName + "." + this.contact;
-                XMLNode creatorNode = new XMLNode(new XMLTriple(CREATOR_TAG, null, CREATOR_NS));
+                XMLNode creatorNode = new XMLNode(new XMLTriple("creator", null, "dc"));
                 creatorNode.addChild(new XMLNode(creator));
                 pmfNode.addChild(creatorNode);
             }
 
             // Builds created date node
             if (metadata.createdDate != null) {
-                XMLNode createdNode = new XMLNode(new XMLTriple(CREATED_TAG, "", CREATED_NS));
+                XMLNode createdNode = new XMLNode(new XMLTriple("created", "", "dcterms"));
                 createdNode.addChild(new XMLNode(FskMetaData.dateFormat.format(metadata.createdDate)));
                 pmfNode.addChild(createdNode);
             }
 
             // Builds modified date node
             if (metadata.modifiedDate != null) {
-                XMLNode modifiedNode = new XMLNode(new XMLTriple(MODIFIED_TAG, "", MODIFIED_NS));
+                XMLNode modifiedNode = new XMLNode(new XMLTriple("modified", "", "dcterms"));
                 modifiedNode.addChild(new XMLNode(FskMetaData.dateFormat.format(metadata.modifiedDate)));
                 pmfNode.addChild(modifiedNode);
             }
 
             // Builds type node
             if (metadata.type != null) {
-                XMLNode typeNode = new XMLNode(new XMLTriple(TYPE_TAG, "", TYPE_NS));
+                XMLNode typeNode = new XMLNode(new XMLTriple("type", "", "dc"));
                 typeNode.addChild(new XMLNode(metadata.type.name()));
                 pmfNode.addChild(typeNode);
             }
 
             // Builds rights node
             if (StringUtils.isNotEmpty(metadata.rights)) {
-                XMLNode rightsNode = new XMLNode(new XMLTriple(RIGHTS_TAG, "", RIGHTS_NS));
+                XMLNode rightsNode = new XMLNode(new XMLTriple("rights", "", "dc"));
                 rightsNode.addChild(new XMLNode(metadata.rights));
                 pmfNode.addChild(rightsNode);
             }
 
             // Builds reference description node
             if (StringUtils.isNotEmpty(metadata.referenceDescription)) {
-                XMLNode refdescNode = new XMLNode(new XMLTriple(REFDESC_TAG, "", REFDESC_NS));
+                XMLNode refdescNode = new XMLNode(new XMLTriple("description", "", "dc"));
                 refdescNode.addChild(new XMLNode(metadata.referenceDescription));
                 pmfNode.addChild(refdescNode);
             }
 
             // Builds reference description link node
             if (StringUtils.isNotEmpty(metadata.referenceDescriptionLink)) {
-                XMLNode refdescLinkNode = new XMLNode(new XMLTriple(REFDESCLINK_TAG, "", REFDESCLINK_NS));
+                XMLNode refdescLinkNode = new XMLNode(new XMLTriple("source", "", "dc"));
                 refdescLinkNode.addChild(new XMLNode(metadata.referenceDescriptionLink));
                 pmfNode.addChild(refdescLinkNode);
             }
@@ -470,10 +439,10 @@ public class MetadataDocument {
         }
 
         public MetadataAnnotation(final Annotation annotation) {
-            XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement(METADATA_TAG, "");
+            XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement("metadata", "");
 
             // Reads creatorNode
-            XMLNode creatorNode = pmfNode.getChildElement(CREATOR_TAG, "");
+            XMLNode creatorNode = pmfNode.getChildElement("creator", "");
             if (creatorNode != null) {
                 String[] tempStrings = creatorNode.getChild(0).getCharacters().split("\\.", 3);
                 this.givenName = StringUtils.defaultString(tempStrings[0]);
@@ -482,7 +451,7 @@ public class MetadataDocument {
             }
 
             // Reads created date
-            XMLNode createdNode = pmfNode.getChildElement(CREATED_TAG, "");
+            XMLNode createdNode = pmfNode.getChildElement("created", "");
             if (createdNode != null) {
                 try {
                     this.createdDate = FskMetaData.dateFormat.parse(createdNode.getChild(0).getCharacters());
@@ -492,7 +461,7 @@ public class MetadataDocument {
             }
 
             // Reads modified date
-            XMLNode modifiedNode = pmfNode.getChildElement(MODIFIED_TAG, "");
+            XMLNode modifiedNode = pmfNode.getChildElement("modified", "");
             if (modifiedNode != null) {
                 try {
                     this.modifiedDate = FskMetaData.dateFormat.parse(modifiedNode.getChild(0).getCharacters());
@@ -502,25 +471,25 @@ public class MetadataDocument {
             }
 
             // Reads model type
-            XMLNode typeNode = pmfNode.getChildElement(TYPE_TAG, "");
+            XMLNode typeNode = pmfNode.getChildElement("type", "");
             if (typeNode != null) {
                 this.type = ModelType.valueOf(typeNode.getChild(0).getCharacters());
             }
 
             // Reads rights
-            XMLNode rightsNode = pmfNode.getChildElement(RIGHTS_TAG, "");
+            XMLNode rightsNode = pmfNode.getChildElement("rights", "");
             if (rightsNode != null) {
                 this.rights = rightsNode.getChild(0).getCharacters();
             }
 
             // Reads reference description
-            XMLNode refdescNode = pmfNode.getChildElement(REFDESC_TAG, "");
+            XMLNode refdescNode = pmfNode.getChildElement("description", "");
             if (refdescNode != null) {
                 this.referenceDescription = refdescNode.getChild(0).getCharacters();
             }
 
             // Reads reference description link
-            XMLNode refdescLinkNode = pmfNode.getChildElement(REFDESCLINK_TAG, "");
+            XMLNode refdescLinkNode = pmfNode.getChildElement("source", "");
             if (refdescLinkNode != null) {
                 this.referenceDescriptionLink = refdescLinkNode.getChild(0).getCharacters();
             }
