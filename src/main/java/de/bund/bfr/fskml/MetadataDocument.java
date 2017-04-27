@@ -504,9 +504,6 @@ public class MetadataDocument {
      */
     public static class RuleAnnotation {
 
-        public static final String SUBJECT_NAME = "subject";
-        public static final String SUBJECT_URI = "pmmlab";
-
         public ModelClass modelClass;
         public Annotation annotation;
 
@@ -516,7 +513,7 @@ public class MetadataDocument {
             XMLNode pmfNode = new XMLNode(pmfTriple);
 
             // Builds model class node
-            XMLTriple modelClassTriple = new XMLTriple(SUBJECT_NAME, null, SUBJECT_URI);
+            XMLTriple modelClassTriple = new XMLTriple("subject", null, "pmmlab");
             XMLNode modelClassNode = new XMLNode(modelClassTriple);
             modelClassNode.addChild(new XMLNode(modelClass.fullName()));
             pmfNode.addChild(modelClassNode);
@@ -531,7 +528,7 @@ public class MetadataDocument {
             XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement("metadata", "");
 
             // Reads model class node
-            XMLNode modelClassNode = pmfNode.getChildElement(SUBJECT_NAME, "");
+            XMLNode modelClassNode = pmfNode.getChildElement("subject", "");
             if (modelClassNode != null) {
                 this.modelClass = ModelClass.fromName(modelClassNode.getChild(0).getCharacters());
             }
