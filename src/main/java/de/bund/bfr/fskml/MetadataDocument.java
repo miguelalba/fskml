@@ -58,7 +58,23 @@ public class MetadataDocument {
         this.doc.addDeclaredNamespace("xmlns:xlink", "http//www.w3.org/1999/xlink");
 
         // Adds document annotation
-        this.doc.setAnnotation(new MetadataAnnotation(template).annotation);
+        {
+            String givenName = StringUtils.defaultString(template.creator);
+            String familyName = StringUtils.defaultString(template.familyName);
+            String contact = StringUtils.defaultString(template.contact);
+            String createdDate = template.createdDate == null ? "" : FskMetaData.dateFormat.format(template
+                    .createdDate);
+            String modifiedDate = template.modifiedDate == null ? "" : FskMetaData.dateFormat.format(template
+                    .modifiedDate);
+            String type = template.type == null ? "" : template.type.name();
+            String rights = StringUtils.defaultString(template.rights);
+            String referenceDescription = StringUtils.defaultString(template.referenceDescription);
+            String referenceDescriptionLink = StringUtils.defaultString(template.referenceDescriptionLink);
+
+            Annotation annotation = new MetadataAnnotation(givenName, familyName, contact, createdDate,
+                    modifiedDate, type, rights, referenceDescription, referenceDescriptionLink).annotation;
+            this.doc.setAnnotation(annotation);
+        }
 
         // Creates model and names it
         Model model;
@@ -289,15 +305,36 @@ public class MetadataDocument {
 
         // creator
         MetadataAnnotation annot = new MetadataAnnotation(this.doc.getAnnotation());
-        template.creator = annot.givenName;
-        template.familyName = annot.familyName;
-        template.contact = annot.contact;
-        template.createdDate = annot.createdDate;
-        template.modifiedDate = annot.modifiedDate;
-        template.type = annot.type;
-        template.rights = annot.rights;
-        template.referenceDescription = annot.referenceDescription;
-        template.referenceDescriptionLink = annot.referenceDescriptionLink;
+        template.creator = annot.getGivenName();
+        template.familyName = annot.getFamilyName();
+        template.contact = annot.getContact();
+
+        String createdDateString = annot.getCreatedDate();
+        if (!createdDateString.isEmpty()) {
+            try {
+                template.createdDate = FskMetaData.dateFormat.parse(createdDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String modifiedDateString = annot.getModifiedDate();
+        if (!modifiedDateString.isEmpty()) {
+            try {
+                template.modifiedDate = FskMetaData.dateFormat.parse(modifiedDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String typeString = annot.getModelType();
+        if (!typeString.isEmpty()) {
+            template.type = ModelType.valueOf(typeString);
+        }
+
+        template.rights = annot.getRights();
+        template.referenceDescription = annot.getReferenceDescription();
+        template.referenceDescriptionLink = annot.getReferenceDescriptionLink();
 
         if (model.getNumRules() > 0) {
             AssignmentRule rule = (AssignmentRule) model.getRule(0);
@@ -362,74 +399,72 @@ public class MetadataDocument {
 
         Annotation annotation;
 
-        // Fields with metadata
-        String givenName;
-        String familyName;
-        String contact;
-        Date createdDate;
-        Date modifiedDate;
-        ModelType type;
-        String rights;
-        String referenceDescription;
-        String referenceDescriptionLink;
-
-        MetadataAnnotation(final FskMetaData metadata) {
+        /**
+         * Creates an {@link Annotation} with metadata encoded with Dublin Core.
+         *
+         * @param creator                  Empty string if missing
+         * @param familyName               Empty string if missing
+         * @param contact                  Empty string if missing
+         * @param createdDate              Empty string if missing
+         * @param modifiedDate             Empty string if missing
+         * @param type                     Empty string if missing
+         * @param rights                   Empty string if missing
+         * @param referenceDescription     Empty string missing
+         * @param referenceDescriptionLink Empty string missing
+         */
+        MetadataAnnotation(final String creator, final String familyName, final String contact,
+                           final String createdDate, final String modifiedDate, final String type,
+                           final String rights, final String referenceDescription, final String referenceDescriptionLink) {
 
             XMLTriple pmfTriple = new XMLTriple("metadata", "", "pmf");
             XMLNode pmfNode = new XMLNode(pmfTriple);
 
             // Builds creator node
-            if (StringUtils.isNotEmpty(metadata.creator) || StringUtils.isNotEmpty(metadata.familyName)
-                    || StringUtils.isNotEmpty(metadata.contact)) {
-                this.givenName = StringUtils.defaultString(metadata.creator);
-                this.familyName = StringUtils.defaultString(metadata.familyName);
-                this.contact = StringUtils.defaultString(metadata.contact);
-
-                String creator = this.givenName + "." + this.familyName + "." + this.contact;
-                XMLNode creatorNode = new XMLNode(new XMLTriple("creator", null, "dc"));
-                creatorNode.addChild(new XMLNode(creator));
+            if (!creator.isEmpty() || !familyName.isEmpty() || !contact.isEmpty()) {
+                XMLNode creatorNode = new XMLNode(new XMLTriple("creator", "", "dc"));
+                creatorNode.addChild(new XMLNode(creator + "." + familyName + "." + contact));
                 pmfNode.addChild(creatorNode);
             }
 
             // Builds created date node
-            if (metadata.createdDate != null) {
+            if (!createdDate.isEmpty()) {
                 XMLNode createdNode = new XMLNode(new XMLTriple("created", "", "dcterms"));
-                createdNode.addChild(new XMLNode(FskMetaData.dateFormat.format(metadata.createdDate)));
+                createdNode.addChild(new XMLNode(createdDate));
                 pmfNode.addChild(createdNode);
             }
 
             // Builds modified date node
-            if (metadata.modifiedDate != null) {
+            if (!modifiedDate.isEmpty()) {
                 XMLNode modifiedNode = new XMLNode(new XMLTriple("modified", "", "dcterms"));
-                modifiedNode.addChild(new XMLNode(FskMetaData.dateFormat.format(metadata.modifiedDate)));
+                modifiedNode.addChild(new XMLNode(modifiedDate));
                 pmfNode.addChild(modifiedNode);
             }
 
             // Builds type node
-            if (metadata.type != null) {
+            if (!type.isEmpty()) {
                 XMLNode typeNode = new XMLNode(new XMLTriple("type", "", "dc"));
-                typeNode.addChild(new XMLNode(metadata.type.name()));
+                typeNode.addChild(new XMLNode(type));
                 pmfNode.addChild(typeNode);
             }
 
             // Builds rights node
-            if (StringUtils.isNotEmpty(metadata.rights)) {
+            if (!rights.isEmpty()) {
                 XMLNode rightsNode = new XMLNode(new XMLTriple("rights", "", "dc"));
-                rightsNode.addChild(new XMLNode(metadata.rights));
+                rightsNode.addChild(new XMLNode(rights));
                 pmfNode.addChild(rightsNode);
             }
 
             // Builds reference description node
-            if (StringUtils.isNotEmpty(metadata.referenceDescription)) {
+            if (!referenceDescription.isEmpty()) {
                 XMLNode refdescNode = new XMLNode(new XMLTriple("description", "", "dc"));
-                refdescNode.addChild(new XMLNode(metadata.referenceDescription));
+                refdescNode.addChild(new XMLNode(referenceDescription));
                 pmfNode.addChild(refdescNode);
             }
 
             // Builds reference description link node
-            if (StringUtils.isNotEmpty(metadata.referenceDescriptionLink)) {
+            if (!referenceDescriptionLink.isEmpty()) {
                 XMLNode refdescLinkNode = new XMLNode(new XMLTriple("source", "", "dc"));
-                refdescLinkNode.addChild(new XMLNode(metadata.referenceDescriptionLink));
+                refdescLinkNode.addChild(new XMLNode(referenceDescriptionLink));
                 pmfNode.addChild(refdescLinkNode);
             }
 
@@ -439,63 +474,89 @@ public class MetadataDocument {
         }
 
         MetadataAnnotation(final Annotation annotation) {
-            XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement("metadata", "");
-
-            // Reads creatorNode
-            XMLNode creatorNode = pmfNode.getChildElement("creator", "");
-            if (creatorNode != null) {
-                String[] tempStrings = creatorNode.getChild(0).getCharacters().split("\\.", 3);
-                this.givenName = StringUtils.defaultString(tempStrings[0]);
-                this.familyName = StringUtils.defaultString(tempStrings[1]);
-                this.contact = StringUtils.defaultString(tempStrings[2]);
-            }
-
-            // Reads created date
-            XMLNode createdNode = pmfNode.getChildElement("created", "");
-            if (createdNode != null) {
-                try {
-                    this.createdDate = FskMetaData.dateFormat.parse(createdNode.getChild(0).getCharacters());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Reads modified date
-            XMLNode modifiedNode = pmfNode.getChildElement("modified", "");
-            if (modifiedNode != null) {
-                try {
-                    this.modifiedDate = FskMetaData.dateFormat.parse(modifiedNode.getChild(0).getCharacters());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Reads model type
-            XMLNode typeNode = pmfNode.getChildElement("type", "");
-            if (typeNode != null) {
-                this.type = ModelType.valueOf(typeNode.getChild(0).getCharacters());
-            }
-
-            // Reads rights
-            XMLNode rightsNode = pmfNode.getChildElement("rights", "");
-            if (rightsNode != null) {
-                this.rights = rightsNode.getChild(0).getCharacters();
-            }
-
-            // Reads reference description
-            XMLNode refdescNode = pmfNode.getChildElement("description", "");
-            if (refdescNode != null) {
-                this.referenceDescription = refdescNode.getChild(0).getCharacters();
-            }
-
-            // Reads reference description link
-            XMLNode refdescLinkNode = pmfNode.getChildElement("source", "");
-            if (refdescLinkNode != null) {
-                this.referenceDescriptionLink = refdescLinkNode.getChild(0).getCharacters();
-            }
-
-            // Copies annotation
             this.annotation = annotation;
+        }
+
+        /**
+         * @return given name or empty string if missing.
+         */
+        String getGivenName() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("creator", "");
+            return node == null ? "" : node.getChild(0).getCharacters().split("\\.", 3)[0];
+        }
+
+        /**
+         * Return family name or empty string if missing.
+         */
+        String getFamilyName() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("creator", "");
+            return node == null ? "" : node.getChild(0).getCharacters().split("\\.", 3)[1];
+        }
+
+        /**
+         * @return contact or empty string if missing.
+         */
+        String getContact() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("creator", "");
+            return node == null ? "" : node.getChild(0).getCharacters().split("\\.", 3)[2];
+        }
+
+        /**
+         * @return created date or empty string if missing.
+         */
+        String getCreatedDate() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("created", "");
+            return node == null ? "" : node.getChild(0).getCharacters();
+        }
+
+        /**
+         * @return modified date or empty string if missing.
+         */
+        String getModifiedDate() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("modified", "");
+            return node == null ? "" : node.getChild(0).getCharacters();
+        }
+
+        /**
+         * @return model type or empty string if missing.
+         */
+        String getModelType() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("type", "");
+            return node == null ? "" : node.getChild(0).getCharacters();
+
+        }
+
+        /**
+         * @return model rights or empty string if missing.
+         */
+        String getRights() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("rights", "");
+            return node == null ? "" : node.getChild(0).getCharacters();
+        }
+
+        /**
+         * @return the reference description or empty string if missing.
+         */
+        String getReferenceDescription() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("description", "");
+            return node == null ? "" : node.getChild(0).getCharacters();
+        }
+
+        /**
+         * @return the reference description link or empty string if missing.
+         */
+        String getReferenceDescriptionLink() {
+            XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "")
+                    .getChildElement("source", "");
+            return node == null ? "" : node.getChild(0).getCharacters();
         }
     }
 
