@@ -502,12 +502,12 @@ public class MetadataDocument {
     /**
      * Reduced version of PMF-ML ModelRuleAnnotation with only the model class.
      */
-    public static class RuleAnnotation {
+    static class RuleAnnotation {
 
-        public ModelClass modelClass;
-        public Annotation annotation;
+        final ModelClass modelClass;
+        final Annotation annotation;
 
-        public RuleAnnotation(final ModelClass modelClass) {
+        RuleAnnotation(final ModelClass modelClass) {
             // Builds metadata node
             XMLTriple pmfTriple = new XMLTriple("metadata", null, "pmf");
             XMLNode pmfNode = new XMLNode(pmfTriple);
@@ -521,17 +521,20 @@ public class MetadataDocument {
             // Create annotation
             this.annotation = new Annotation();
             this.annotation.setNonRDFAnnotation(pmfNode);
+
+            // Copies modelClass
+            this.modelClass = modelClass;
         }
 
-        public RuleAnnotation(final Annotation annotation) {
+        RuleAnnotation(final Annotation annotation) throws IllegalArgumentException {
 
             XMLNode pmfNode = annotation.getNonRDFannotation().getChildElement("metadata", "");
 
             // Reads model class node
             XMLNode modelClassNode = pmfNode.getChildElement("subject", "");
-            if (modelClassNode != null) {
-                this.modelClass = ModelClass.fromName(modelClassNode.getChild(0).getCharacters());
-            }
+            if (modelClassNode == null)
+                throw new IllegalArgumentException("Annotation does not contain a ModelClass");
+            this.modelClass = ModelClass.fromName(modelClassNode.getChild(0).getCharacters());
 
             // Copies annotation
             this.annotation = annotation;
