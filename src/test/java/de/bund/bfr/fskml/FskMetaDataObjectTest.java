@@ -38,14 +38,12 @@ public class FskMetaDataObjectTest {
 
         try (CombineArchive archive = new CombineArchive(archiveFile)) {
 
-            File dummyArchiveFile = File.createTempFile("entry", "txt");
-            dummyArchiveFile.deleteOnExit();
+            File dummyFile = File.createTempFile("entry", "txt");
+            dummyFile.deleteOnExit();
 
             // Test model script
             {
-                File file = File.createTempFile("model", "r");
-                file.deleteOnExit();
-                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "model.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "model.r", URIS.r);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.modelScript);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -56,9 +54,7 @@ public class FskMetaDataObjectTest {
 
             // Test param script
             {
-                File file = File.createTempFile("param", "r");
-                file.deleteOnExit();
-                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "param.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "param.r", URIS.r);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.parametersScript);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -68,9 +64,7 @@ public class FskMetaDataObjectTest {
 
             // Test visualization script
             {
-                File file = File.createTempFile("visualization", "r");
-                file.deleteOnExit();
-                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "visualization.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "visualization.r", URIS.r);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.visualizationScript);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -80,9 +74,7 @@ public class FskMetaDataObjectTest {
 
             // Test metadata file
             {
-                File file = File.createTempFile("metadata", ".pmf");
-                file.deleteOnExit();
-                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "metadata.pmf", URIS.pmf);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "metadata.pmf", URIS.pmf);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.metaData);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -92,9 +84,7 @@ public class FskMetaDataObjectTest {
 
             // Test workspace file
             {
-                File file = File.createTempFile("workspace", ".r");
-                file.deleteOnExit();
-                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "workspace.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "workspace.r", URIS.r);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.workspace);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -104,9 +94,7 @@ public class FskMetaDataObjectTest {
 
             // Test clone
             {
-                File file = File.createTempFile("workspace", ".r");
-                file.deleteOnExit();
-                ArchiveEntry entry = archive.addEntry(dummyArchiveFile, "workspace.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "workspace.r", URIS.r);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.workspace);
                 entry.addDescription(fmdo.metaDataObject);
 
