@@ -191,7 +191,7 @@ public class MetadataDocument {
                     String cleanArray = v.value.substring(2, v.value.length() - 1);
                     // Split values into tokens using the coma as splitter
                     String[] tokens = cleanArray.split(",");
-                    List<Double> values = Arrays.stream(tokens).map(Double::parseDouble).collect(Collectors.toList());
+                    double[] values = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
 
                     new ParameterArray(param, v.name, values);
                 } else if (v.type == DataType.character) {
@@ -342,9 +342,8 @@ public class MetadataDocument {
                 if (param.getNumPlugins() > 0) {
                     var.type = DataType.array;
                     InitialAssignment ia = model.getInitialAssignment(var.name);
-                    List<Double> array = new ParameterArray(ia).getValues();
-                    var.value = "c(" + array.stream().map(d -> Double.toString(d)).collect(Collectors.joining(","))
-                            + ")";
+                    double[] array = new ParameterArray(ia).getValues();
+                    var.value = "c(" + StringUtils.join(array, ",") + ")";
                 } else {
                     var.type = param.getValue() % 1 == 0 ? DataType.integer : DataType.numeric;
                     var.value = Double.toString(param.getValue());
@@ -591,11 +590,11 @@ public class MetadataDocument {
 
         final InitialAssignment initialAssignment;
 
-        ParameterArray(final Parameter parameter, final String var, final List<Double> values) {
+        ParameterArray(final Parameter parameter, final String var, final double[] values) {
             // Create dimension within parameter
             ArraysSBasePlugin parameterPlugin = (ArraysSBasePlugin) parameter.getPlugin(ArraysConstants.shortLabel);
             Dimension dimension = parameterPlugin.createDimension("d0");
-            dimension.setSize(Integer.toString(values.size()));
+            dimension.setSize(Integer.toString(values.length));
             dimension.setArrayDimension(0);
 
             // Create initial assignment
@@ -624,9 +623,9 @@ public class MetadataDocument {
             this.initialAssignment = assignment;
         }
 
-        List<Double> getValues() {
-            return this.initialAssignment.getMath().getChild(0).getChildren().stream().map(ASTNode::getReal)
-                    .collect(Collectors.toList());
+        double[] getValues() {
+            return this.initialAssignment.getMath().getChild(0).getChildren().stream().mapToDouble(ASTNode::getReal)
+                    .toArray();
         }
     }
 }

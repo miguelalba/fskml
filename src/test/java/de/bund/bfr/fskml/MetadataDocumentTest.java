@@ -10,12 +10,7 @@ import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Parameter;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class MetadataDocumentTest {
@@ -75,7 +70,7 @@ public class MetadataDocumentTest {
     public void testParameterArray() {
         Model model = new Model(3, 2);
         Parameter parameter = model.createParameter();
-        List<Double> values = Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0);
+        double[] values = {0.0, 1.0, 2.0, 3.0, 4.0};
         ParameterArray parameterArray = new ParameterArray(parameter, "my_param", values);
 
         // Check that Parameter has an initial assignment
@@ -87,12 +82,11 @@ public class MetadataDocumentTest {
         // Check Real nodes in initial assignment
         ASTNode vectorNode = parameterArray.initialAssignment.getMath().getChild(0);
         assertEquals(ASTNode.Type.VECTOR, vectorNode.getType());
-        List<Double> obtainedValues = vectorNode.getChildren().stream().map(ASTNode::getReal).collect(Collectors
-                .toList());
-        assertEquals(values, obtainedValues);
+        double[] obtainedValues = vectorNode.getChildren().stream().mapToDouble(ASTNode::getReal).toArray();
+        assertArrayEquals(values, obtainedValues, .0);
 
         // Check ParameterArray#getValues
         ParameterArray parameterArray2 = new ParameterArray(parameterArray.initialAssignment);
-        assertEquals(values, parameterArray2.getValues());
+        assertArrayEquals(values, parameterArray2.getValues(), .0);
     }
 }
