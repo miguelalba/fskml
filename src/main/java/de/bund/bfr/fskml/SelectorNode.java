@@ -22,7 +22,6 @@ import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.MathContainer;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Create the {@link ASTNode} corresponding to a selector node with all the
@@ -49,13 +48,5 @@ public class SelectorNode {
         ASTNode vectorNode = new ASTNode(ASTNode.Type.VECTOR, mc);
         numbers.forEach(d -> vectorNode.addChild(new ASTNode(d)));
         this.node.addChild(vectorNode);
-    }
-
-    public SelectorNode(final ASTNode node) {
-        this.node = node;
-    }
-
-    public List<Double> getArray() {
-        return this.node.getChild(0).getChildren().stream().map(ASTNode::getReal).collect(Collectors.toList());
     }
 }

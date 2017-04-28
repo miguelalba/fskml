@@ -241,32 +241,10 @@ public class MetadataDocument {
     private static void addArrayToParameter(Parameter parameter, String value, String var) throws ParseException {
         String cleanArray = value.substring(2, value.length() - 1);
         String[] tokens = cleanArray.split(",");
-        List<Double> array = Arrays.stream(tokens).map(Double::parseDouble).collect(Collectors.toList());
-        int size = tokens.length;
 
-        // Create dimension within parameter
-        ArraysSBasePlugin arrayPlugin = (ArraysSBasePlugin) parameter.getPlugin(ArraysConstants.shortLabel);
-        Dimension dim = arrayPlugin.createDimension("d0");
-        dim.setSize(Integer.toString(size));
-        dim.setArrayDimension(0);
 
-        // Create initial assignment
-        InitialAssignment ia = parameter.getModel().createInitialAssignment();
-        ia.setVariable(var);
-
-        // Create math of initial assignment with a selector function
-        ia.setMath(new SelectorNode(array, ia).node);
-
-        ArraysSBasePlugin iaPlugin = (ArraysSBasePlugin) ia.getPlugin(ArraysConstants.shortLabel);
-
-        // Add dimension to initial assignment
-        iaPlugin.addDimension(dim.clone());
-
-        // Add index to initial assignment
-        Index index = iaPlugin.createIndex();
-        index.setReferencedAttribute("symbol");
-        index.setArrayDimension(0);
-        index.setMath(new ASTNode("d0"));
+        double[] array = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
+        new ParameterArray(parameter, var, array);
     }
 
     public MetadataDocument(final SBMLDocument doc) {
@@ -374,7 +352,7 @@ public class MetadataDocument {
                 if (param.getNumPlugins() > 0) {
                     var.type = DataType.array;
                     InitialAssignment ia = model.getInitialAssignment(var.name);
-                    List<Double> array = new SelectorNode(ia.getMath()).getArray();
+                    List<Double> array = new ParameterArray(ia).getValues();
                     var.value = "c(" + array.stream().map(d -> Double.toString(d)).collect(Collectors.joining(","))
                             + ")";
                 } else {
@@ -597,6 +575,49 @@ public class MetadataDocument {
             XMLNode node = annotation.getNonRDFannotation().getChildElement("metadata", "").getChildElement
                     ("subject", "");
             return node.getChild(0).getCharacters();
+        }
+    }
+
+    static class ParameterArray {
+
+        final InitialAssignment initialAssignment;
+
+        ParameterArray(final Parameter parameter, final String var, final double[] array) {
+            // Create dimension within parameter
+            ArraysSBasePlugin parameterPlugin = (ArraysSBasePlugin) parameter.getPlugin(ArraysConstants.shortLabel);
+            Dimension dimension = parameterPlugin.createDimension("d0");
+            dimension.setSize(Integer.toString(array.length));
+            dimension.setArrayDimension(0);
+
+            // Create initial assignment
+            this.initialAssignment = parameter.getModel().createInitialAssignment();
+            this.initialAssignment.setVariable(var);
+
+            // Create math of initial assignment with a selector function
+            ASTNode node = new ASTNode(ASTNode.Type.FUNCTION_SELECTOR, this.initialAssignment);
+            ASTNode vectorNode = new ASTNode(ASTNode.Type.VECTOR, this.initialAssignment);
+            for (double d : array) {
+                vectorNode.addChild(new ASTNode(d));
+            }
+            node.addChild(vectorNode);
+            this.initialAssignment.setMath(node);
+
+            ArraysSBasePlugin iaPlugin = (ArraysSBasePlugin) this.initialAssignment.getPlugin(ArraysConstants.shortLabel);
+
+            // Add index to initial assignment
+            Index index = iaPlugin.createIndex();
+            index.setReferencedAttribute("symbol");
+            index.setArrayDimension(0);
+            index.setMath(new ASTNode("d0"));
+        }
+
+        ParameterArray(InitialAssignment assignment) {
+            this.initialAssignment = assignment;
+        }
+
+        List<Double> getValues() {
+            return this.initialAssignment.getMath().getChild(0).getChildren().stream().map(ASTNode::getReal).collect
+                    (Collectors.toList());
         }
     }
 }
