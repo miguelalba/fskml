@@ -1,10 +1,18 @@
 package de.bund.bfr.fskml;
 
 import de.bund.bfr.fskml.MetadataDocument.MetadataAnnotation;
+import de.bund.bfr.fskml.MetadataDocument.ParameterArray;
 import de.bund.bfr.fskml.MetadataDocument.RuleAnnotation;
 import de.bund.bfr.pmfml.ModelClass;
 import de.bund.bfr.pmfml.ModelType;
 import org.junit.Test;
+import org.sbml.jsbml.ASTNode;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Parameter;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -61,5 +69,30 @@ public class MetadataDocumentTest {
         RuleAnnotation annot1 = new RuleAnnotation(ModelClass.UNKNOWN.fullName());
         RuleAnnotation annot2 = new RuleAnnotation(annot1.annotation);
         assertEquals(ModelClass.UNKNOWN, ModelClass.fromName(annot2.getModelClass()));
+    }
+
+    @Test
+    public void testParameterArray() {
+        Model model = new Model(3, 2);
+        Parameter parameter = model.createParameter();
+        List<Double> values = Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0);
+        ParameterArray parameterArray = new ParameterArray(parameter, "my_param", values);
+
+        // Check that Parameter has an initial assignment
+        assertTrue(model.getNumInitialAssignments() == 1);
+
+        // Check variable in initial assignment
+        assertEquals("my_param", parameterArray.initialAssignment.getVariable());
+
+        // Check Real nodes in initial assignment
+        ASTNode vectorNode = parameterArray.initialAssignment.getMath().getChild(0);
+        assertEquals(ASTNode.Type.VECTOR, vectorNode.getType());
+        List<Double> obtainedValues = vectorNode.getChildren().stream().map(ASTNode::getReal).collect(Collectors
+                .toList());
+        assertEquals(values, obtainedValues);
+
+        // Check ParameterArray#getValues
+        ParameterArray parameterArray2 = new ParameterArray(parameterArray.initialAssignment);
+        assertEquals(values, parameterArray2.getValues());
     }
 }

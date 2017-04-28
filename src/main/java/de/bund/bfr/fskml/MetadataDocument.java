@@ -179,25 +179,24 @@ public class MetadataDocument {
 
             // Write value if v.type and v.value are not null
             if (v.type != null && StringUtils.isNotEmpty(v.value)) {
-                switch (v.type) {
-                    case integer:
-                        param.setValue(Double.valueOf(v.value).intValue());
-                        break;
-                    case numeric:
-                        param.setValue(Double.parseDouble(v.value));
-                        break;
-                    case array:
-                        // TODO: Add array
-                        try {
-                            param.setValue(0);
-                            addArrayToParameter(param, v.value, v.name);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case character:
-                        // TODO: Add character
-                        break;
+
+                if (v.type == DataType.integer) {
+                    param.setValue(Double.valueOf(v.value).intValue());
+                } else if (v.type == DataType.numeric) {
+                    param.setValue(Double.valueOf(v.value));
+                } else if (v.type == DataType.array) {
+                    param.setValue(0);
+
+                    // Remove "c(" and ")" around the values in the array
+                    String cleanArray = v.value.substring(2, v.value.length() - 1);
+                    // Split values into tokens using the coma as splitter
+                    String[] tokens = cleanArray.split(",");
+                    List<Double> values = Arrays.stream(tokens).map(Double::parseDouble).collect(Collectors.toList());
+
+                    new ParameterArray(param, v.name, values);
+                } else if (v.type == DataType.character) {
+                    // TODO: Add character
+                    break;
                 }
             }
 
@@ -236,15 +235,6 @@ public class MetadataDocument {
             rule.setAnnotation(new RuleAnnotation(modelClass).annotation);
             model.addRule(rule);
         }
-    }
-
-    private static void addArrayToParameter(Parameter parameter, String value, String var) throws ParseException {
-        String cleanArray = value.substring(2, value.length() - 1);
-        String[] tokens = cleanArray.split(",");
-
-
-        double[] array = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
-        new ParameterArray(parameter, var, array);
     }
 
     public MetadataDocument(final SBMLDocument doc) {
@@ -578,15 +568,34 @@ public class MetadataDocument {
         }
     }
 
+    /**
+     * Creates a {@link Dimension} and an {@link InitialAssignment} containing a selector node
+     * with all the values of an array.
+     * <p>
+     * Structure:
+     * <pre>
+     * {@code
+     * apply>
+     *     <selector>
+     *     <vector>
+     *         <cn>0</cn>
+     *         <cn>1</cn>
+     *         ...
+     *         <cn>n</cn>
+     *      </vector>
+     * </apply>
+     * }
+     * </pre>
+     */
     static class ParameterArray {
 
         final InitialAssignment initialAssignment;
 
-        ParameterArray(final Parameter parameter, final String var, final double[] array) {
+        ParameterArray(final Parameter parameter, final String var, final List<Double> values) {
             // Create dimension within parameter
             ArraysSBasePlugin parameterPlugin = (ArraysSBasePlugin) parameter.getPlugin(ArraysConstants.shortLabel);
             Dimension dimension = parameterPlugin.createDimension("d0");
-            dimension.setSize(Integer.toString(array.length));
+            dimension.setSize(Integer.toString(values.size()));
             dimension.setArrayDimension(0);
 
             // Create initial assignment
@@ -596,7 +605,7 @@ public class MetadataDocument {
             // Create math of initial assignment with a selector function
             ASTNode node = new ASTNode(ASTNode.Type.FUNCTION_SELECTOR, this.initialAssignment);
             ASTNode vectorNode = new ASTNode(ASTNode.Type.VECTOR, this.initialAssignment);
-            for (double d : array) {
+            for (Double d : values) {
                 vectorNode.addChild(new ASTNode(d));
             }
             node.addChild(vectorNode);
@@ -616,8 +625,8 @@ public class MetadataDocument {
         }
 
         List<Double> getValues() {
-            return this.initialAssignment.getMath().getChild(0).getChildren().stream().map(ASTNode::getReal).collect
-                    (Collectors.toList());
+            return this.initialAssignment.getMath().getChild(0).getChildren().stream().map(ASTNode::getReal)
+                    .collect(Collectors.toList());
         }
     }
 }
