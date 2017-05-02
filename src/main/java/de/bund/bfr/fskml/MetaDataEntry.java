@@ -15,14 +15,53 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 
 public class MetaDataEntry {
 
     public ArchiveEntry entry;
     public FskMetaData metaData;
 
-    public MetaDataEntry(CombineArchive archive, String targetName, FskMetaData metaData)
+    /**
+     * Creates a {@link MetaDataEntry} for a model including replacements.
+     *
+     * @param archive COMBINE archive
+     * @param targetName Name of the metadata file in the COMBINE archive
+     * @param metaData FSK model metadata
+     * @param replacements Map of replacements
+     * @throws IOException
+     * @throws SBMLException
+     * @throws XMLStreamException
+     */
+    public MetaDataEntry(CombineArchive archive, String targetName, FskMetaData metaData,
+                         Map<String, String> replacements)
             throws IOException, SBMLException, XMLStreamException {
+
+        SBMLDocument doc = new MetadataDocument(metaData, replacements).doc;
+
+        // Creates temporary file with metadata
+        File f = Files.createTempFile("metadata", "pmf").toFile();
+        f.deleteOnExit();
+        new SBMLWriter().write(doc, f);
+
+        this.entry = archive.addEntry(f, targetName, URIS.pmf);
+        this.entry.addDescription(new FskMetaDataObject(ResourceType.metaData).metaDataObject);
+        this.metaData = metaData;
+    }
+
+    /**
+     * Creates a {@link MetaDataEntry} for models that have no replacements such as one model COMBINE archives or the
+     * first model in a COMBINE archive.
+     *
+     * @param archive COMBINE archive
+     * @param targetName Name of the metadata file in the COMBINE archive
+     * @param metaData FSK model metadata
+     * @throws IOException
+     * @throws SBMLException
+     * @throws XMLStreamException
+     */
+    public MetaDataEntry(CombineArchive archive, String targetName, FskMetaData metaData)
+        throws IOException, SBMLException, XMLStreamException {
 
         SBMLDocument doc = new MetadataDocument(metaData).doc;
 

@@ -30,6 +30,7 @@ import org.sbml.jsbml.ext.arrays.ArraysConstants;
 import org.sbml.jsbml.ext.arrays.ArraysSBasePlugin;
 import org.sbml.jsbml.ext.arrays.Dimension;
 import org.sbml.jsbml.ext.arrays.Index;
+import org.sbml.jsbml.ext.comp.*;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 
@@ -42,7 +43,7 @@ public class MetadataDocument {
 
     public SBMLDocument doc;
 
-    public MetadataDocument(FskMetaData template) {
+    public MetadataDocument(FskMetaData template, Map<String, String> replacements) {
         // Creates SBMLDocument for the primary model
         this.doc = new SBMLDocument(3, 1);
 
@@ -55,7 +56,7 @@ public class MetadataDocument {
         this.doc.addDeclaredNamespace("xmlns:pmmlab",
                 "http://sourceforge.net/projects/microbialmodelingexchange/files/PMF-ML");
         this.doc.addDeclaredNamespace("xmlns:numl", "http://www.numl.org/numl/level1/version1");
-        this.doc.addDeclaredNamespace("xmlns:xlink", "http//www.w3.org/1999/xlink");
+        this.doc.addDeclaredNamespace("xmlns:xlink", "http://www.w3.org/1999/xlink");
 
         // Adds document annotation
         {
@@ -235,6 +236,30 @@ public class MetadataDocument {
             rule.setAnnotation(new RuleAnnotation(modelClass).annotation);
             model.addRule(rule);
         }
+
+
+        // TODO: work in progress:
+        // The ExternalModelDefinition and Submodel are requisites of the SBML replacements
+
+        // ExternalModelDefinition
+        CompSBMLDocumentPlugin docPlugin = (CompSBMLDocumentPlugin) this.doc.getPlugin(CompConstants.shortLabel);
+        ExternalModelDefinition emd = docPlugin.createExternalModelDefinition("model_id");
+        emd.setSource("a_file.sbml");
+        emd.setModelRef("model_id");
+
+        // Submodel
+        CompModelPlugin modelPlugin = (CompModelPlugin) model.getPlugin(CompConstants.shortLabel);
+        Submodel submodel = modelPlugin.createSubmodel("submodel_id");
+        submodel.setModelRef("model_id");
+
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            Parameter parameter = model.getParameter(entry.getKey());
+
+            CompSBasePlugin plugin = (CompSBasePlugin) parameter.getPlugin(CompConstants.shortLabel);
+            ReplacedBy replacedBy = plugin.createReplacedBy();
+            replacedBy.setIdRef(entry.getValue());
+            replacedBy.setSubmodelRef(submodel.getId());
+        }
     }
 
     public MetadataDocument(final SBMLDocument doc) {
@@ -307,7 +332,7 @@ public class MetadataDocument {
         if (model.getNumRules() > 0) {
             AssignmentRule rule = (AssignmentRule) model.getRule(0);
             String modelClassString = new RuleAnnotation(rule.getAnnotation()).getModelClass();
-            template.subject = ModelClass.valueOf(modelClassString);
+            template.subject = ModelClass.fromName(modelClassString);
         }
 
         // model notes
@@ -361,6 +386,200 @@ public class MetadataDocument {
         template.hasData = false;
 
         return template;
+    }
+
+    /**
+     * Creates a {@link MetadataDocument} with no replacements.
+     *
+     * @param template FSK model metadata
+     */
+    public MetadataDocument(FskMetaData template) {
+
+        // Creates SBMLDocument for the primary model
+        this.doc = new SBMLDocument(3, 1);
+
+        // Adds namespaces to the SBMLDocument
+        this.doc.addDeclaredNamespace("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        this.doc.addDeclaredNamespace("xmlns:pmml", "http://www.dmg.org/PMML-4_2");
+        this.doc.addDeclaredNamespace("xmlns:pmf", "http://sourceforge" +
+                ".net/projects/microbialmodelingexchange/files/PMF-ML");
+        this.doc.addDeclaredNamespace("xmlns:dc", "http://purl.org/dc/elements/1.1");
+        this.doc.addDeclaredNamespace("xmlns:dcterms", "http://purl.org/dc/terms/");
+        this.doc.addDeclaredNamespace("xmlns:pmmlab", "http://sourceforge" +
+                ".net/projects/microbialmodelingexchange/files/PMF-ML");
+        this.doc.addDeclaredNamespace("xmlns:numl", "http://www.numl.org/numl/level1/version1");
+        this.doc.addDeclaredNamespace("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+        // Adds document annotation
+        {
+            String givenName = StringUtils.defaultString(template.creator);
+            String familyName = StringUtils.defaultString(template.familyName);
+            String contact = StringUtils.defaultString(template.contact);
+            String createdDate = template.createdDate == null ? "" : FskMetaData.dateFormat.format(template
+                    .createdDate);
+            String modifiedDate = template.modifiedDate == null ? "" : FskMetaData.dateFormat.format(template
+                    .modifiedDate);
+            String type = template.type == null ? "" : template.type.name();
+            String rights = StringUtils.defaultString(template.rights);
+            String referenceDescription = StringUtils.defaultString(template.referenceDescription);
+            String referenceDescriptionLink = StringUtils.defaultString(template.referenceDescriptionLink);
+
+            Annotation annotation = new MetadataAnnotation(givenName, familyName, contact, createdDate, modifiedDate,
+                    type, rights, referenceDescription, referenceDescriptionLink).annotation;
+            this.doc.setAnnotation(annotation);
+        }
+
+        // Creates model and names it
+        Model model;
+        if (StringUtils.isEmpty(template.modelId)) {
+            model = this.doc.createModel();
+        } else {
+            model = this.doc.createModel(PMFUtil.createId(template.modelId));
+        }
+
+        if (StringUtils.isNotEmpty(template.modelName)) {
+            model.setName(template.modelName);
+        }
+
+        // Set model notes
+        if (StringUtils.isNotEmpty(template.notes)) {
+            try {
+                model.setNotes(template.notes);
+            } catch (XMLStreamException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Creates and add compartment to the model
+        if (StringUtils.isNotEmpty(template.matrix)) {
+            PMFCompartment compartment = SBMLFactory.createPMFCompartment(PMFUtil.createId(template.matrix), template
+                    .matrix);
+            if (StringUtils.isNotEmpty(template.matrixDetails)) {
+                compartment.setDetail(template.matrixDetails);
+            }
+            model.addCompartment(compartment.getCompartment());
+        }
+
+        // Add unit definitions here (before parameters)
+        Set<String> unitsSet = new LinkedHashSet<>();
+        template.dependentVariables.forEach(v -> unitsSet.add(v.unit.trim()));
+        template.independentVariables.forEach(v -> unitsSet.add(v.unit.trim()));
+        for (String unit : unitsSet) {
+            UnitDefinition ud = model.createUnitDefinition(PMFUtil.createId(unit));
+            ud.setName(unit);
+        }
+
+        // Adds dependent parameters
+        for (Variable v : template.dependentVariables) {
+            if (StringUtils.isEmpty(v.name))
+                continue;
+
+            Parameter param = model.createParameter(PMFUtil.createId(v.name));
+            param.setName(v.name);
+
+            // Write unit if v.unit is not null
+            if (StringUtils.isNotEmpty(v.unit)) {
+                try {
+                    param.setUnits(PMFUtil.createId(v.unit));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Write min and max values if not null
+            if (StringUtils.isNoneEmpty(v.min, v.max)) {
+                try {
+                    double min = Double.parseDouble(v.min);
+                    double max = Double.parseDouble(v.max);
+                    LimitsConstraint lc = new LimitsConstraint(v.name.replaceAll("\\.", "\\_"), min, max);
+                    if (lc.getConstraint() != null) {
+                        model.addConstraint(lc.getConstraint());
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // TODO: Add independent parameters
+        for (Variable v : template.independentVariables) {
+            if (StringUtils.isEmpty(v.name))
+                continue;
+
+            Parameter param = model.createParameter(PMFUtil.createId(v.name));
+            param.setName(v.name);
+
+            // Write value if v.type and v.value are not null
+            if (v.type != null && StringUtils.isNotEmpty(v.value)) {
+
+                if (v.type == DataType.integer) {
+                    param.setValue(Double.valueOf(v.value).intValue());
+                } else if (v.type == DataType.numeric) {
+                    param.setValue(Double.valueOf(v.value));
+                } else if (v.type == DataType.array) {
+                    param.setValue(0);
+
+                    // Remove "c(" and ")" around the values in the array
+                    String cleanArray = v.value.substring(2, v.value.length() - 1);
+                    // Split values into tokens using the comma as splitter
+                    String[] tokens = cleanArray.split(",");
+                    double[] values = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
+
+                    new ParameterArray(param, v.name, values);
+                }
+            } else if (v.type == DataType.character) {
+                // TODO: Add character
+                break;
+            }
+
+            // Write unit if v.unit is not null
+            if (StringUtils.isNotEmpty(v.unit)) {
+                try {
+                    param.setUnits(PMFUtil.createId(v.unit));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Write min and max values if not null
+            if (StringUtils.isNoneEmpty(v.min, v.max)) {
+                try {
+                    double min = Double.parseDouble(v.min);
+                    double max = Double.parseDouble(v.max);
+                    LimitsConstraint lc = new LimitsConstraint(param.getId(), min, max);
+                    if (lc.getConstraint() != null) {
+                        model.addConstraint(lc.getConstraint());
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Add rule
+        if (model.getNumParameters() > 0 && StringUtils.isNotEmpty(model.getParameter(0).getId())) {
+            AssignmentRule rule = new AssignmentRule(3, 1);
+            // Assigns the id of the dependent parameter which happens to be the first parameter of the model
+            rule.setVariable(model.getParameter(0).getId());
+
+            String modelClass = template.subject == null ? ModelClass.UNKNOWN.fullName() : template.subject.fullName();
+            rule.setAnnotation(new RuleAnnotation(modelClass).annotation);
+            model.addRule(rule);
+        }
+    }
+
+    public Map<String, String> getReplacements(final SBMLDocument doc) {
+
+        Map<String, String> replacements = new HashMap<>();
+
+        for (Parameter parameter : doc.getModel().getListOfParameters()) {
+            if (parameter.getNumPlugins() == 0) continue;
+
+            CompSBasePlugin plugin = (CompSBasePlugin) parameter.getPlugin(CompConstants.shortLabel);
+            replacements.put(parameter.getId(), plugin.getReplacedBy().getIdRef());
+        }
+
+        return replacements;
     }
 
     static class MetadataAnnotation {
