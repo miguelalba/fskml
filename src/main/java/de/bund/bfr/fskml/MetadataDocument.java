@@ -47,27 +47,9 @@ public class MetadataDocument {
         // Creates SBMLDocument for the primary model
         this.doc = new SBMLDocument(3, 1);
 
-        // Adds namespaces to the sbmlDocument
-        addNamespaces(this.doc);
+        addNamespaces(this.doc);  // Adds namespaces to the SBMLDocument
 
-        // Adds document annotation
-        {
-            String givenName = StringUtils.defaultString(template.creator);
-            String familyName = StringUtils.defaultString(template.familyName);
-            String contact = StringUtils.defaultString(template.contact);
-            String createdDate = template.createdDate == null ? "" : FskMetaData.dateFormat.format(template
-                    .createdDate);
-            String modifiedDate = template.modifiedDate == null ? "" : FskMetaData.dateFormat.format(template
-                    .modifiedDate);
-            String type = template.type == null ? "" : template.type.name();
-            String rights = StringUtils.defaultString(template.rights);
-            String referenceDescription = StringUtils.defaultString(template.referenceDescription);
-            String referenceDescriptionLink = StringUtils.defaultString(template.referenceDescriptionLink);
-
-            Annotation annotation = new MetadataAnnotation(givenName, familyName, contact, createdDate,
-                    modifiedDate, type, rights, referenceDescription, referenceDescriptionLink).annotation;
-            this.doc.setAnnotation(annotation);
-        }
+        addDocumentAnnotation(template);
 
         // Creates model and names it
         Model model;
@@ -377,27 +359,9 @@ public class MetadataDocument {
         // Creates SBMLDocument for the primary model
         this.doc = new SBMLDocument(3, 1);
 
-        // Adds namespaces to the SBMLDocument
-        addNamespaces(this.doc);
+        addNamespaces(this.doc);  // Adds namespaces to the SBMLDocument
 
-        // Adds document annotation
-        {
-            String givenName = StringUtils.defaultString(template.creator);
-            String familyName = StringUtils.defaultString(template.familyName);
-            String contact = StringUtils.defaultString(template.contact);
-            String createdDate = template.createdDate == null ? "" : FskMetaData.dateFormat.format(template
-                    .createdDate);
-            String modifiedDate = template.modifiedDate == null ? "" : FskMetaData.dateFormat.format(template
-                    .modifiedDate);
-            String type = template.type == null ? "" : template.type.name();
-            String rights = StringUtils.defaultString(template.rights);
-            String referenceDescription = StringUtils.defaultString(template.referenceDescription);
-            String referenceDescriptionLink = StringUtils.defaultString(template.referenceDescriptionLink);
-
-            Annotation annotation = new MetadataAnnotation(givenName, familyName, contact, createdDate, modifiedDate,
-                    type, rights, referenceDescription, referenceDescriptionLink).annotation;
-            this.doc.setAnnotation(annotation);
-        }
+        addDocumentAnnotation(template);
 
         // Creates model and names it
         Model model;
@@ -577,6 +541,29 @@ public class MetadataDocument {
             UnitDefinition ud = model.createUnitDefinition(PMFUtil.createId(unit));
             ud.setName(unit);
         }
+    }
+
+    /**
+     * @param template FSK model metadata
+     */
+    private void addDocumentAnnotation(final FskMetaData template) {
+
+        // null is replaces with empty string
+        String givenName = StringUtils.defaultString(template.creator);
+        String familyName = StringUtils.defaultString(template.familyName);
+        String contact = StringUtils.defaultString(template.contact);
+        String createdDate = template.createdDate == null ? "" : FskMetaData.dateFormat.format(template
+                .createdDate);
+        String modifiedDate = template.modifiedDate == null ? "" : FskMetaData.dateFormat.format(template
+                .modifiedDate);
+        String type = template.type == null ? "" : template.type.name();
+        String rights = StringUtils.defaultString(template.rights);
+        String referenceDescription = StringUtils.defaultString(template.referenceDescription);
+        String referenceDescriptionLink = StringUtils.defaultString(template.referenceDescriptionLink);
+
+        Annotation annotation = new MetadataAnnotation(givenName, familyName, contact, createdDate, modifiedDate,
+                type, rights, referenceDescription, referenceDescriptionLink).annotation;
+        this.doc.setAnnotation(annotation);
     }
 
     static class MetadataAnnotation {
