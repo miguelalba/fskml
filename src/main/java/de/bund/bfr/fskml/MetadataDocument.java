@@ -103,59 +103,7 @@ public class MetadataDocument {
         template.dependentVariables.forEach(v -> addDependentVariable(model, v));
 
         // Adds independent parameters
-        for (Variable v : template.independentVariables) {
-            if (StringUtils.isEmpty(v.name))
-                continue;
-
-            Parameter param = model.createParameter(PMFUtil.createId(v.name));
-            param.setName(v.name);
-
-            // Write value if v.type and v.value are not null
-            if (v.type != null && StringUtils.isNotEmpty(v.value)) {
-
-                if (v.type == DataType.integer) {
-                    param.setValue(Double.valueOf(v.value).intValue());
-                } else if (v.type == DataType.numeric) {
-                    param.setValue(Double.valueOf(v.value));
-                } else if (v.type == DataType.array) {
-                    param.setValue(0);
-
-                    // Remove "c(" and ")" around the values in the array
-                    String cleanArray = v.value.substring(2, v.value.length() - 1);
-                    // Split values into tokens using the coma as splitter
-                    String[] tokens = cleanArray.split(",");
-                    double[] values = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
-
-                    new ParameterArray(param, v.name, values);
-                } else if (v.type == DataType.character) {
-                    // TODO: Add character
-                    break;
-                }
-            }
-
-            // Write unit if v.unit is not null
-            if (StringUtils.isNotEmpty(v.unit)) {
-                try {
-                    param.setUnits(PMFUtil.createId(v.unit));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Write min and max values if not null
-            if (StringUtils.isNoneEmpty(v.min, v.max)) {
-                try {
-                    double min = Double.parseDouble(v.min);
-                    double max = Double.parseDouble(v.max);
-                    LimitsConstraint lc = new LimitsConstraint(param.getId(), min, max);
-                    if (lc.getConstraint() != null) {
-                        model.addConstraint(lc.getConstraint());
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        template.independentVariables.forEach(v -> addIndependentVariable(model, v));
 
         // Add rule
         if (model.getNumParameters() > 0 && StringUtils.isNotEmpty(model.getParameter(0).getId())) {
@@ -364,60 +312,8 @@ public class MetadataDocument {
         // Adds dependent parameters
         template.dependentVariables.forEach(v -> addDependentVariable(model, v));
 
-        // TODO: Add independent parameters
-        for (Variable v : template.independentVariables) {
-            if (StringUtils.isEmpty(v.name))
-                continue;
-
-            Parameter param = model.createParameter(PMFUtil.createId(v.name));
-            param.setName(v.name);
-
-            // Write value if v.type and v.value are not null
-            if (v.type != null && StringUtils.isNotEmpty(v.value)) {
-
-                if (v.type == DataType.integer) {
-                    param.setValue(Double.valueOf(v.value).intValue());
-                } else if (v.type == DataType.numeric) {
-                    param.setValue(Double.valueOf(v.value));
-                } else if (v.type == DataType.array) {
-                    param.setValue(0);
-
-                    // Remove "c(" and ")" around the values in the array
-                    String cleanArray = v.value.substring(2, v.value.length() - 1);
-                    // Split values into tokens using the comma as splitter
-                    String[] tokens = cleanArray.split(",");
-                    double[] values = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
-
-                    new ParameterArray(param, v.name, values);
-                }
-            } else if (v.type == DataType.character) {
-                // TODO: Add character
-                break;
-            }
-
-            // Write unit if v.unit is not null
-            if (StringUtils.isNotEmpty(v.unit)) {
-                try {
-                    param.setUnits(PMFUtil.createId(v.unit));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Write min and max values if not null
-            if (StringUtils.isNoneEmpty(v.min, v.max)) {
-                try {
-                    double min = Double.parseDouble(v.min);
-                    double max = Double.parseDouble(v.max);
-                    LimitsConstraint lc = new LimitsConstraint(param.getId(), min, max);
-                    if (lc.getConstraint() != null) {
-                        model.addConstraint(lc.getConstraint());
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        // Add independent parameters
+        template.independentVariables.forEach(v -> addIndependentVariable(model, v));
 
         // Add rule
         if (model.getNumParameters() > 0 && StringUtils.isNotEmpty(model.getParameter(0).getId())) {
@@ -530,6 +426,60 @@ public class MetadataDocument {
                 double min = Double.parseDouble(v.min);
                 double max = Double.parseDouble(v.max);
                 LimitsConstraint lc = new LimitsConstraint(v.name.replaceAll("\\.", "\\_"), min, max);
+                if (lc.getConstraint() != null) {
+                    model.addConstraint(lc.getConstraint());
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addIndependentVariable(final Model model, final Variable v) {
+        if (StringUtils.isEmpty(v.name))
+            return;
+
+        Parameter param = model.createParameter(PMFUtil.createId(v.name));
+        param.setName(v.name);
+
+        // Write value if v.type and v.value are not null
+        if (v.type != null && StringUtils.isNotEmpty(v.value)) {
+
+            if (v.type == DataType.integer) {
+                param.setValue(Double.valueOf(v.value).intValue());
+            } else if (v.type == DataType.numeric) {
+                param.setValue(Double.valueOf(v.value));
+            } else if (v.type == DataType.array) {
+                param.setValue(0);
+
+                // Remove "c(" and ")" around the values in the array
+                String cleanArray = v.value.substring(2, v.value.length() - 1);
+                // Split values into tokens using the comma as splitter
+                String[] tokens = cleanArray.split(",");
+                double[] values = Arrays.stream(tokens).mapToDouble(Double::parseDouble).toArray();
+
+                new ParameterArray(param, v.name, values);
+            }
+        } else if (v.type == DataType.character) {
+            // TODO: Add character
+            return;
+        }
+
+        // Write unit if v.unit is not null
+        if (StringUtils.isNotEmpty(v.unit)) {
+            try {
+                param.setUnits(PMFUtil.createId(v.unit));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Write min and max values if not null
+        if (StringUtils.isNoneEmpty(v.min, v.max)) {
+            try {
+                double min = Double.parseDouble(v.min);
+                double max = Double.parseDouble(v.max);
+                LimitsConstraint lc = new LimitsConstraint(param.getId(), min, max);
                 if (lc.getConstraint() != null) {
                     model.addConstraint(lc.getConstraint());
                 }
