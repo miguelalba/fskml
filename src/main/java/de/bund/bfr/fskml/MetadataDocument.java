@@ -91,14 +91,7 @@ public class MetadataDocument {
         }
 
         // Creates and adds compartment to the model
-        if (StringUtils.isNotEmpty(template.matrix)) {
-            PMFCompartment compartment = SBMLFactory.createPMFCompartment(PMFUtil.createId(template.matrix),
-                    template.matrix);
-            if (StringUtils.isNotEmpty(template.matrixDetails)) {
-                compartment.setDetail(template.matrixDetails);
-            }
-            model.addCompartment(compartment.getCompartment());
-        }
+        addCompartment(model, template.matrix, template.matrixDetails);
 
         // TODO: Creates and adds species to the model
 
@@ -434,14 +427,7 @@ public class MetadataDocument {
         }
 
         // Creates and add compartment to the model
-        if (StringUtils.isNotEmpty(template.matrix)) {
-            PMFCompartment compartment = SBMLFactory.createPMFCompartment(PMFUtil.createId(template.matrix), template
-                    .matrix);
-            if (StringUtils.isNotEmpty(template.matrixDetails)) {
-                compartment.setDetail(template.matrixDetails);
-            }
-            model.addCompartment(compartment.getCompartment());
-        }
+        addCompartment(model, template.matrix, template.matrixDetails);
 
         // Add unit definitions here (before parameters)
         Set<String> unitsSet = new LinkedHashSet<>();
@@ -575,6 +561,17 @@ public class MetadataDocument {
                 "http://sourceforge.net/projects/microbialmodelingexchange/files/PMF-ML");
         doc.addDeclaredNamespace("xmlns:numl", "http://www.numl.org/numl/level1/version1");
         doc.addDeclaredNamespace("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    }
+
+    private void addCompartment(final Model model, final String matrix, final String matrixDetails) {
+        if (StringUtils.isNotEmpty(matrix)) {
+            PMFCompartment compartment = SBMLFactory.createPMFCompartment(PMFUtil.createId(matrix),
+                    matrix);
+            if (StringUtils.isNotEmpty(matrixDetails)) {
+                compartment.setDetail(matrixDetails);
+            }
+            model.addCompartment(compartment.getCompartment());
+        }
     }
 
     static class MetadataAnnotation {
