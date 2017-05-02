@@ -115,13 +115,7 @@ public class MetadataDocument {
         // }
 
         // Add unit definitions here (before parameters)
-        Set<String> unitsSet = new LinkedHashSet<>();
-        template.dependentVariables.forEach(v -> unitsSet.add(v.unit.trim()));
-        template.independentVariables.forEach(v -> unitsSet.add(v.unit.trim()));
-        for (String unit : unitsSet) {
-            UnitDefinition ud = model.createUnitDefinition(PMFUtil.createId(unit));
-            ud.setName(unit);
-        }
+        addUnitDefintions(model, template.dependentVariables, template.independentVariables);
 
         // Adds dep parameter
         for (Variable v : template.dependentVariables) {
@@ -430,13 +424,7 @@ public class MetadataDocument {
         addCompartment(model, template.matrix, template.matrixDetails);
 
         // Add unit definitions here (before parameters)
-        Set<String> unitsSet = new LinkedHashSet<>();
-        template.dependentVariables.forEach(v -> unitsSet.add(v.unit.trim()));
-        template.independentVariables.forEach(v -> unitsSet.add(v.unit.trim()));
-        for (String unit : unitsSet) {
-            UnitDefinition ud = model.createUnitDefinition(PMFUtil.createId(unit));
-            ud.setName(unit);
-        }
+        addUnitDefintions(model, template.dependentVariables, template.independentVariables);
 
         // Adds dependent parameters
         for (Variable v : template.dependentVariables) {
@@ -571,6 +559,23 @@ public class MetadataDocument {
                 compartment.setDetail(matrixDetails);
             }
             model.addCompartment(compartment.getCompartment());
+        }
+    }
+
+    /**
+     * Add {@link UnitDefinition} of the units used in dependent and independent variables to the SBML model.
+     *
+     * @param model  SBML model
+     * @param deps   List of dependent variables
+     * @param indeps List of independent variables
+     */
+    private void addUnitDefintions(final Model model, final List<Variable> deps, final List<Variable> indeps) {
+        Set<String> unitsSet = new LinkedHashSet<>();
+        deps.forEach(v -> unitsSet.add(v.unit.trim()));
+        indeps.forEach(v -> unitsSet.add(v.unit.trim()));
+        for (String unit : unitsSet) {
+            UnitDefinition ud = model.createUnitDefinition(PMFUtil.createId(unit));
+            ud.setName(unit);
         }
     }
 
