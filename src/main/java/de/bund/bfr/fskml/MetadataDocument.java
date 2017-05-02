@@ -100,36 +100,7 @@ public class MetadataDocument {
         addUnitDefintions(model, template.dependentVariables, template.independentVariables);
 
         // Adds dep parameter
-        for (Variable v : template.dependentVariables) {
-            if (StringUtils.isEmpty(v.name))
-                continue;
-
-            Parameter param = model.createParameter(PMFUtil.createId(v.name));
-            param.setName(v.name);
-
-            // Write unit if v.unit is not null
-            if (StringUtils.isNotEmpty(v.unit)) {
-                try {
-                    param.setUnits(PMFUtil.createId(v.unit));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Write min and max values if not null
-            if (StringUtils.isNoneEmpty(v.min, v.max)) {
-                try {
-                    double min = Double.parseDouble(v.min);
-                    double max = Double.parseDouble(v.max);
-                    LimitsConstraint lc = new LimitsConstraint(v.name.replaceAll("\\.", "\\_"), min, max);
-                    if (lc.getConstraint() != null) {
-                        model.addConstraint(lc.getConstraint());
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        template.dependentVariables.forEach(v -> addDependentVariable(model, v));
 
         // Adds independent parameters
         for (Variable v : template.independentVariables) {
@@ -391,36 +362,7 @@ public class MetadataDocument {
         addUnitDefintions(model, template.dependentVariables, template.independentVariables);
 
         // Adds dependent parameters
-        for (Variable v : template.dependentVariables) {
-            if (StringUtils.isEmpty(v.name))
-                continue;
-
-            Parameter param = model.createParameter(PMFUtil.createId(v.name));
-            param.setName(v.name);
-
-            // Write unit if v.unit is not null
-            if (StringUtils.isNotEmpty(v.unit)) {
-                try {
-                    param.setUnits(PMFUtil.createId(v.unit));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Write min and max values if not null
-            if (StringUtils.isNoneEmpty(v.min, v.max)) {
-                try {
-                    double min = Double.parseDouble(v.min);
-                    double max = Double.parseDouble(v.max);
-                    LimitsConstraint lc = new LimitsConstraint(v.name.replaceAll("\\.", "\\_"), min, max);
-                    if (lc.getConstraint() != null) {
-                        model.addConstraint(lc.getConstraint());
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        template.dependentVariables.forEach(v -> addDependentVariable(model, v));
 
         // TODO: Add independent parameters
         for (Variable v : template.independentVariables) {
@@ -564,6 +506,37 @@ public class MetadataDocument {
         Annotation annotation = new MetadataAnnotation(givenName, familyName, contact, createdDate, modifiedDate,
                 type, rights, referenceDescription, referenceDescriptionLink).annotation;
         this.doc.setAnnotation(annotation);
+    }
+
+    private void addDependentVariable(final Model model, final Variable v) {
+        if (StringUtils.isEmpty(v.name))
+            return;
+
+        Parameter param = model.createParameter(PMFUtil.createId(v.name));
+        param.setName(v.name);
+
+        // Write unit if v.unit is not null
+        if (StringUtils.isNotEmpty(v.unit)) {
+            try {
+                param.setUnits(PMFUtil.createId(v.unit));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Write min and max values if not null
+        if (StringUtils.isNoneEmpty(v.min, v.max)) {
+            try {
+                double min = Double.parseDouble(v.min);
+                double max = Double.parseDouble(v.max);
+                LimitsConstraint lc = new LimitsConstraint(v.name.replaceAll("\\.", "\\_"), min, max);
+                if (lc.getConstraint() != null) {
+                    model.addConstraint(lc.getConstraint());
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     static class MetadataAnnotation {
