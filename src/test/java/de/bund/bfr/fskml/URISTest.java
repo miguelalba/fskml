@@ -33,5 +33,8 @@ public class URISTest {
         assertEquals(new URI("http://purl.org/NET/mediatypes/application/sbml+xml"), URIS.sbml);
         assertEquals(new URI("http://purl.org/NET/mediatypes/text/x-matlab"), URIS.matlab);
         assertEquals(new URI("http://purl.org/NET/mediatypes/text/x-php"), URIS.php);
+        assertEquals(new URI("http://purl.org/NET/mediatypes/text/plain"), URIS.plainText);
+        assertEquals(new URI("http://purl.org/NET/mediatypes/text/x-RData"), URIS.rData);
+        assertEquals(new URI("https://www.iana.org/assignments/media-types/application/json"), URIS.json);
     }
 }
