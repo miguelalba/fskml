@@ -33,25 +33,18 @@ public class RScript {
 
 	/**
 	 * Process R script.
-	 * 
-	 * @param file
-	 * @throws IOException
-	 *             if the file specified by path cannot be read.
 	 */
-	public RScript(final File file) throws IOException {
-
-		// throws IOException
-		String fileContents = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+	public RScript(final String script) {
 
 		// If no errors are thrown, proceed to extract libraries and sources
-		final String[] lines = fileContents.split("\\r?\\n");
+		final String[] lines = script.split("\\r?\\n");
 
 		final Pattern libPattern = Pattern.compile("^\\s*\\b(library|require)\\((\"?.+\"?)\\)");
 		final Pattern srcPattern = Pattern.compile("^\\s*\\b(source)\\((\"?.+\"?)\\)");
 
 		StringBuilder sb = new StringBuilder();
 		for (final String line : lines) {
-			sb.append(line + '\n');
+			sb.append(line).append('\n');
 
 			final Matcher libMatcher = libPattern.matcher(line);
 			final Matcher srcMatcher = srcPattern.matcher(line);
@@ -65,7 +58,18 @@ public class RScript {
 			}
 		}
 
-		script = sb.toString();
+		this.script = sb.toString();
+	}
+
+	/**
+	 * Process R script.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 *             if the file specified by path cannot be read.
+	 */
+	public RScript(final File file) throws IOException {
+		this(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
 	}
 
 	/**
