@@ -42,6 +42,9 @@ public class URIS {
     /** JSON file. */
     public static final URI json;
 
+    /** CSV file. */
+    public static final URI csv;
+
     static {
         try {
             zip = new URI("http://purl.org/NET/mediatypes/application/zip");
@@ -56,6 +59,7 @@ public class URIS {
             php = new URI("http://purl.org/NET/mediatypes/text/x-php");
             plainText = new URI("http://purl.org/NET/mediatypes/text/plain");
             rData = new URI("http://purl.org/NET/mediatypes/text/x-RData");
+            csv = new URI("https://www.iana.org/assignments/media-types/text/csv");
 
         } catch (URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
