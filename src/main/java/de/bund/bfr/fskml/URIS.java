@@ -30,6 +30,7 @@ public class URIS {
     public static final URI r;
     public static final URI pmf;
     public static final URI sbml;
+    public static final URI sedml;
     public static final URI matlab;
     public static final URI php;
 
@@ -53,6 +54,7 @@ public class URIS {
             r = new URI("http://purl.org/NET/mediatypes/application/r");
             pmf = new URI("http://purl.org/NET/mediatypes/application/x-pmf");
             sbml = new URI("http://purl.org/NET/mediatypes/application/sbml+xml");
+            sedml = new URI("http://identifiers.org/combine.specifications/sed-ml");
             json = new URI("https://www.iana.org/assignments/media-types/application/json");
 
             matlab = new URI("http://purl.org/NET/mediatypes/text/x-matlab");

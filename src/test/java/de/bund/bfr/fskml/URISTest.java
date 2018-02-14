@@ -31,6 +31,7 @@ public class URISTest {
         assertEquals(new URI("http://purl.org/NET/mediatypes/application/r"), URIS.r);
         assertEquals(new URI("http://purl.org/NET/mediatypes/application/x-pmf"), URIS.pmf);
         assertEquals(new URI("http://purl.org/NET/mediatypes/application/sbml+xml"), URIS.sbml);
+        assertEquals(new URI("http://identifiers.org/combine.specifications/sed-ml"), URIS.sedml);
         assertEquals(new URI("http://purl.org/NET/mediatypes/text/x-matlab"), URIS.matlab);
         assertEquals(new URI("http://purl.org/NET/mediatypes/text/x-php"), URIS.php);
         assertEquals(new URI("http://purl.org/NET/mediatypes/text/plain"), URIS.plainText);
