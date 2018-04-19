@@ -39,23 +39,57 @@ public class RScript {
 		// If no errors are thrown, proceed to extract libraries and sources
 		final String[] lines = script.split("\\r?\\n");
 
-		final Pattern libPattern = Pattern.compile("^\\s*\\b(library|require)\\((\"?.+\"?)\\)");
-		final Pattern srcPattern = Pattern.compile("^\\s*\\b(source)\\((\"?.+\"?)\\)");
+		final Pattern noQuotesPattern = Pattern.compile("\\((.*?)\\)");
+		final Pattern doubleQuotePattern = Pattern.compile("\\((\".*?\")\\)");
+		final Pattern simpleQuotePattern = Pattern.compile("\\(('.*?')\\)");
 
 		StringBuilder sb = new StringBuilder();
 		for (final String line : lines) {
 			sb.append(line).append('\n');
 
-			final Matcher libMatcher = libPattern.matcher(line);
-			final Matcher srcMatcher = srcPattern.matcher(line);
+			if (line.startsWith("library") || line.startsWith("require")) {
 
-			if (libMatcher.find()) {
-				final String libName = libMatcher.group(2).replace("\"", "");
-				libraries.add(libName);
-			} else if (srcMatcher.find()) {
-				final String srcName = srcMatcher.group(2).replace("\"", "");
-				sources.add(srcName);
+				// Check for library commands using simple quotes. E.g. library('triangle')
+				Matcher simpleQuoteMatcher = simpleQuotePattern.matcher(line);
+				if (simpleQuoteMatcher.find(1)) {
+					String libraryName = simpleQuoteMatcher.group(1).replace("'", "");
+					libraries.add(libraryName);
+					continue;
+				}
+
+				// Check for library commands using double quotes. E.g. library("triangle")
+				Matcher doubleQuoteMatcher = doubleQuotePattern.matcher(line);
+				if (doubleQuoteMatcher.find(1)) {
+					String libraryName = doubleQuoteMatcher.group(1).replace("\"", "");
+					libraries.add(libraryName);
+					continue;
+				}
+
+				// Check for library commands not using quotes. E.g. library(triangle).
+				Matcher noQuoteMatcher = noQuotesPattern.matcher(line);
+				if (noQuoteMatcher.find(1)) {
+					String libraryName = noQuoteMatcher.group(1);
+					libraries.add(libraryName);
+				}
+
+			} else if (line.startsWith("source")) {
+				// Check for source commands using simple quotes. E.g. library('triangle')
+				Matcher simpleQuoteMatcher = simpleQuotePattern.matcher(line);
+				if (simpleQuoteMatcher.find(1)) {
+					String sourceName = simpleQuoteMatcher.group(1).replace("'", "");
+					sources.add(sourceName);
+					continue;
+				}
+
+				// Check for source commands using double quotes. E.g. library("triangle")
+				Matcher doubleQuoteMatcher = doubleQuotePattern.matcher(line);
+				if (doubleQuoteMatcher.find(1)) {
+					String sourceName = doubleQuoteMatcher.group(1).replace("\"", "");
+					sources.add(sourceName);
+				}
 			}
+
+
 		}
 
 		this.script = sb.toString();

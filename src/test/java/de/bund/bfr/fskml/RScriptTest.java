@@ -21,7 +21,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * @author Miguel Alba
@@ -35,13 +35,18 @@ public class RScriptTest extends TestCase {
 		f.deleteOnExit();
 
 		String origScript = "# This is a comment line: It should not appear in the simplified version\n"
-				+ "library(triangle)\n" + "source(other.R)\n"
+				+ "library(triangle)\n"  // Test library command without quotes
+				+ "library(\"dplyr\")\n"  // Test library command with double quotes
+				+ "library('devtools')\n"  // Test library command with simple quotes
+				+ "library(foreign) # (a)\n" // Test library command followed by a comment (with parentheses)
+				+ "source('other.R')\n" // Source command with simple quotes
+				+ "source(\"other2.R\")\n" // Source command with double quotes
 				+ "hist(result, breaks=50, main=\"PREVALENCE OF PARENT FLOCKS\")\n";
 		FileUtils.writeStringToFile(f, origScript, "UTF-8");
 		RScript rScript = new RScript(f);
 
 		assertEquals(origScript, rScript.getScript());
-		assertEquals(Collections.singletonList("triangle"), rScript.getLibraries());
-		assertEquals(Collections.singletonList("other.R"), rScript.getSources());
+		assertEquals(Arrays.asList("triangle", "dplyr", "devtools", "foreign"), rScript.getLibraries());
+		assertEquals(Arrays.asList("other.R", "other2.R"), rScript.getSources());
 	}
 }
