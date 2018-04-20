@@ -1,6 +1,12 @@
 package de.bund.bfr.fskml;
 
+import de.unirostock.sems.cbarchive.CombineArchive;
+import de.unirostock.sems.cbarchive.meta.MetaDataObject;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FSKML {
@@ -63,5 +69,46 @@ public class FSKML {
         }
 
         return uris;
+    }
+
+    public static Version findVersion(CombineArchive archive) throws URISyntaxException {
+
+        List<MetaDataObject> descriptions = archive.getDescriptions();
+
+        // If archive has RDF metadata with a single description called "metaParent" -> 1.0.0
+        if (descriptions.size() > 0 && descriptions.get(0).getXmlDescription().getName().equals("metaParent")) {
+            return new Version(1, 0, 0);
+        }
+
+        URI newRURI = new URI(getURIS(1, 0, 4).get("r"));
+        URI oldRURI = new URI(getURIS(1, 0, 2).get("r"));
+
+        // If archive uses old URI for R -> 1.0.2
+        if (archive.getNumEntriesWithFormat(oldRURI) > 0) {
+            return new Version(1, 0, 2);
+        }
+
+        // If archive does not use new URI for R -> throw exception
+        if (archive.getNumEntriesWithFormat(newRURI) == 0) {
+            throw new IllegalArgumentException("Version cannot be determined");
+        }
+
+        // If archive contains SED-ML -> 1.0.11
+        if (archive.getNumEntriesWithFormat(new URI(getURIS(1, 0, 11).get("sedml"))) > 0) {
+            return new Version(1, 0, 11);
+        }
+
+        // If archive contains CSV -> 1.0.10
+        if (archive.getNumEntriesWithFormat(new URI(getURIS(1, 0, 10).get("csv"))) > 0) {
+            return new Version(1, 0, 10);
+        }
+
+        // If archive contains JSON, plain text or RData -> 1.0.8
+        Map<String, String> uris108 = getURIS(1, 0, 8);
+        if (archive.getNumEntriesWithFormat(new URI(uris108.get("json"))) > 0) {
+            return new Version(1, 0, 8);
+        }
+
+        return new Version(1, 0, 4);
     }
 }
