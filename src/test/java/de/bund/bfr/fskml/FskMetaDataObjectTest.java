@@ -25,7 +25,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,7 +36,7 @@ public class FskMetaDataObjectTest {
 
     @Test
     public void test() throws IOException {
-        File archiveFile = File.createTempFile("archive", "fskx");
+        File archiveFile = File.createTempFile("archive", ".fskx");
         archiveFile.deleteOnExit();
 
         try (CombineArchive archive = new CombineArchive(archiveFile)) {
@@ -41,9 +44,13 @@ public class FskMetaDataObjectTest {
             File dummyFile = File.createTempFile("entry", "txt");
             dummyFile.deleteOnExit();
 
+            Map<String, URI> rawUris = FSKML.getURIS(1, 0, 11);
+            URI rURI = rawUris.get("r");
+            URI pmfURI = rawUris.get("pmf");
+
             // Test model script
             {
-                ArchiveEntry entry = archive.addEntry(dummyFile, "model.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "model.r", rURI);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.modelScript);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -54,7 +61,7 @@ public class FskMetaDataObjectTest {
 
             // Test param script
             {
-                ArchiveEntry entry = archive.addEntry(dummyFile, "param.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "param.r", rURI);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.parametersScript);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -64,7 +71,7 @@ public class FskMetaDataObjectTest {
 
             // Test visualization script
             {
-                ArchiveEntry entry = archive.addEntry(dummyFile, "visualization.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "visualization.r", rURI);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.visualizationScript);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -74,7 +81,7 @@ public class FskMetaDataObjectTest {
 
             // Test metadata file
             {
-                ArchiveEntry entry = archive.addEntry(dummyFile, "metadata.pmf", URIS.pmf);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "metadata.pmf", pmfURI);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.metaData);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -84,7 +91,7 @@ public class FskMetaDataObjectTest {
 
             // Test workspace file
             {
-                ArchiveEntry entry = archive.addEntry(dummyFile, "workspace.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "workspace.r", rURI);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.workspace);
                 entry.addDescription(fmdo.metaDataObject);
 
@@ -94,7 +101,7 @@ public class FskMetaDataObjectTest {
 
             // Test clone
             {
-                ArchiveEntry entry = archive.addEntry(dummyFile, "workspace.r", URIS.r);
+                ArchiveEntry entry = archive.addEntry(dummyFile, "workspace.r", rURI);
                 FskMetaDataObject fmdo = new FskMetaDataObject(ResourceType.workspace);
                 entry.addDescription(fmdo.metaDataObject);
 

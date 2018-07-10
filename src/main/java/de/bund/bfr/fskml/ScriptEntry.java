@@ -7,6 +7,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public class ScriptEntry {
@@ -23,7 +25,7 @@ public class ScriptEntry {
         f.deleteOnExit();
 
         // Create and add entry to archive
-        this.entry = archive.addEntry(f, targetName, URIS.r);
+        this.entry = archive.addEntry(f, targetName, FSKML.getURIS(1, 0, 11).get("r"));
         this.entry.addDescription(new FskMetaDataObject(resourceType).metaDataObject);
     }
 

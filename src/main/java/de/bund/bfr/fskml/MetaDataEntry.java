@@ -13,6 +13,8 @@ import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class MetaDataEntry {
      */
     public MetaDataEntry(CombineArchive archive, String targetName, FskMetaData metaData,
                          Map<String, String> replacements)
-            throws IOException, SBMLException, XMLStreamException {
+            throws IOException, SBMLException, XMLStreamException, URISyntaxException {
 
         SBMLDocument doc = new MetadataDocument(metaData, replacements).doc;
 
@@ -44,7 +46,7 @@ public class MetaDataEntry {
         f.deleteOnExit();
         new SBMLWriter().write(doc, f);
 
-        this.entry = archive.addEntry(f, targetName, URIS.pmf);
+        this.entry = archive.addEntry(f, targetName, FSKML.getURIS(1, 0, 11).get("pmf"));
         this.entry.addDescription(new FskMetaDataObject(ResourceType.metaData).metaDataObject);
         this.metaData = metaData;
     }
@@ -61,7 +63,7 @@ public class MetaDataEntry {
      * @throws XMLStreamException
      */
     public MetaDataEntry(CombineArchive archive, String targetName, FskMetaData metaData)
-        throws IOException, SBMLException, XMLStreamException {
+            throws IOException, SBMLException, XMLStreamException, URISyntaxException {
 
         SBMLDocument doc = new MetadataDocument(metaData).doc;
 
@@ -70,7 +72,7 @@ public class MetaDataEntry {
         f.deleteOnExit();
         new SBMLWriter().write(doc, f);
 
-        this.entry = archive.addEntry(f, targetName, URIS.pmf);
+        this.entry = archive.addEntry(f, targetName, FSKML.getURIS(1, 0, 11).get("pmf"));
         this.entry.addDescription(new FskMetaDataObject(ResourceType.metaData).metaDataObject);
         this.metaData = metaData;
     }

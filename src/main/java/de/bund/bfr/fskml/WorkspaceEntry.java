@@ -7,6 +7,8 @@ import de.unirostock.sems.cbarchive.meta.MetaDataObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public class WorkspaceEntry {
@@ -15,7 +17,7 @@ public class WorkspaceEntry {
     public File workspaceFile;
 
     public WorkspaceEntry(CombineArchive archive, String targetName, File workspaceFile) throws IOException {
-        this.entry = archive.addEntry(workspaceFile, targetName, URIS.r);
+        this.entry = archive.addEntry(workspaceFile, targetName, FSKML.getURIS(1, 0, 11).get("r"));
 
         MetaDataObject mdo = new FskMetaDataObject(ResourceType.workspace).metaDataObject;
         this.entry.addDescription(mdo);
