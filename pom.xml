@@ -92,9 +92,10 @@
             <version>2.0.6</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.sbml.jsbml.ext/jsbml-comp -->
         <dependency>
-            <groupId>org.sbml.jsbml</groupId>
-            <artifactId>jsbml</artifactId>
+            <groupId>org.sbml.jsbml.ext</groupId>
+            <artifactId>jsbml-comp</artifactId>
             <version>1.3</version>
         </dependency>
 
@@ -102,13 +103,6 @@
             <groupId>org.jlibsedml</groupId>
             <artifactId>jlibsedml</artifactId>
             <version>2.2.3</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.sbml.jsbml.ext/jsbml-comp -->
-        <dependency>
-            <groupId>org.sbml.jsbml.ext</groupId>
-            <artifactId>jsbml-comp</artifactId>
-            <version>1.1</version>
         </dependency>
 
         <!-- JSBML dependencies -->
