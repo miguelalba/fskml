@@ -41,7 +41,10 @@ public class FskMetaDataObject {
         metaData,
 
         /** Binary file with workspace */
-        workspace
+        workspace,
+
+        /** README. */
+        readme
     }
 
     private static final Namespace dcNamespace = Namespace.getNamespace("dc", "http://purl.org/dc/elements/1.1/");
