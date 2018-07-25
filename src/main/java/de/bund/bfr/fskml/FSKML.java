@@ -15,84 +15,79 @@ public class FSKML {
 
         Map<String, URI> uris = new HashMap<>();
 
-        try {
-            if (major == 1 && minor == 0 && (patch == 0 || patch == 2 || patch == 3)) {
-                uris.put("r", new URI("http://www-r-project.org"));
-                uris.put("zip", new URI("http://www.iana.org/assignments/media-types/application/zip"));
-            } else if (major == 1 && minor == 0 && (patch == 4 || patch == 5 || patch == 6 || patch == 7)) {
-                uris.put("zip", new URI("http://purl.org/NET/mediatypes/application/zip"));
-                uris.put("tgz", new URI("http://purl.org/NET/mediatypes/application/x-tgz"));
-                uris.put("tar_gz", new URI("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-                uris.put("r", new URI("http://purl.org/NET/mediatypes/application/r"));
-                uris.put("pmf", new URI("http://purl.org/NET/mediatypes/application/x-pmf"));
-                uris.put("sbml", new URI("http://purl.org/NET/mediatypes/application/sbml+xml"));
-                uris.put("matlab", new URI("http://purl.org/NET/mediatypes/text/x-matlab"));
-                uris.put("php", new URI("http://purl.org/NET/mediatypes/text/x-php"));
-            } else if (major == 1 && minor == 0 && (patch == 8 || patch == 9)) {
-                uris.put("zip", new URI("http://purl.org/NET/mediatypes/application/zip"));
-                uris.put("tgz", new URI("http://purl.org/NET/mediatypes/application/x-tgz"));
-                uris.put("tar_gz", new URI("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-                uris.put("r", new URI("http://purl.org/NET/mediatypes/application/r"));
-                uris.put("pmf", new URI("http://purl.org/NET/mediatypes/application/x-pmf"));
-                uris.put("sbml", new URI("http://purl.org/NET/mediatypes/application/sbml+xml"));
-                uris.put("json", new URI("https://wwww.iana.org/assignments/media-types/application/json"));
-                uris.put("matlab", new URI("http://purl.org/NET/mediatypes/text/x-matlab"));
-                uris.put("php", new URI("http://purl.org/NET/mediatypes/text/x-php"));
-                uris.put("plain", new URI("http://purl.org/NET/mediatypes/text-xplain"));
-                uris.put("rdata", new URI("http://purl.org/NET/mediatypes/x-RData"));
-            } else if (major == 1 && minor == 0 && patch == 10) {
-                uris.put("zip", new URI("http://purl.org/NET/mediatypes/application/zip"));
-                uris.put("tgz", new URI("http://purl.org/NET/mediatypes/application/x-tgz"));
-                uris.put("tar_gz", new URI("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-                uris.put("r", new URI("http://purl.org/NET/mediatypes/application/r"));
-                uris.put("pmf", new URI("http://purl.org/NET/mediatypes/application/x-pmf"));
-                uris.put("sbml", new URI("http://purl.org/NET/mediatypes/application/sbml+xml"));
-                uris.put("json", new URI("https://wwww.iana.org/assignments/media-types/application/json"));
-                uris.put("matlab", new URI("http://purl.org/NET/mediatypes/text/x-matlab"));
-                uris.put("php", new URI("http://purl.org/NET/mediatypes/text/x-php"));
-                uris.put("plain", new URI("http://purl.org/NET/mediatypes/text-xplain"));
-                uris.put("rdata", new URI("http://purl.org/NET/mediatypes/x-RData"));
-                uris.put("csv", new URI("https://www.iana.org/assignments/media-types/text/csv"));
-            } else if (major == 1 && minor == 0 && patch == 11) {
-                uris.put("zip", new URI("http://purl.org/NET/mediatypes/application/zip"));
-                uris.put("tgz", new URI("http://purl.org/NET/mediatypes/application/x-tgz"));
-                uris.put("tar_gz", new URI("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-                uris.put("r", new URI("http://purl.org/NET/mediatypes/application/r"));
-                uris.put("pmf", new URI("http://purl.org/NET/mediatypes/application/x-pmf"));
-                uris.put("sbml", new URI("http://purl.org/NET/mediatypes/application/sbml+xml"));
-                uris.put("json", new URI("https://wwww.iana.org/assignments/media-types/application/json"));
-                uris.put("matlab", new URI("http://purl.org/NET/mediatypes/text/x-matlab"));
-                uris.put("php", new URI("http://purl.org/NET/mediatypes/text/x-php"));
-                uris.put("plain", new URI("http://purl.org/NET/mediatypes/text-xplain"));
-                uris.put("rdata", new URI("http://purl.org/NET/mediatypes/x-RData"));
-                uris.put("csv", new URI("https://www.iana.org/assignments/media-types/text/csv"));
-                uris.put("sedml", new URI("https://identifiers.org/combine.specifications/sed-ml"));
-            } else if (major == 1 && minor == 0 && patch == 12) {
-                uris.put("zip", new URI("http://purl.org/NET/mediatypes/application/zip"));
-                uris.put("tgz", new URI("http://purl.org/NET/mediatypes/application/x-tgz"));
-                uris.put("tar_gz", new URI("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-                uris.put("r", new URI("http://purl.org/NET/mediatypes/application/r"));
-                uris.put("pmf", new URI("http://purl.org/NET/mediatypes/application/x-pmf"));
-                uris.put("sbml", new URI("http://purl.org/NET/mediatypes/application/sbml+xml"));
-                uris.put("json", new URI("https://wwww.iana.org/assignments/media-types/application/json"));
-                uris.put("matlab", new URI("http://purl.org/NET/mediatypes/text/x-matlab"));
-                uris.put("php", new URI("http://purl.org/NET/mediatypes/text/x-php"));
-                uris.put("plain", new URI("http://purl.org/NET/mediatypes/text-xplain"));
-                uris.put("rdata", new URI("http://purl.org/NET/mediatypes/x-RData"));
-                uris.put("csv", new URI("https://www.iana.org/assignments/media-types/text/csv"));
-                uris.put("sedml", new URI("https://identifiers.org/combine.specifications/sed-ml"));
+        if (major == 1 && minor == 0 && (patch == 0 || patch == 2 || patch == 3)) {
+            uris.put("r", URI.create("http://www-r-project.org"));
+            uris.put("zip", URI.create("http://www.iana.org/assignments/media-types/application/zip"));
+        } else if (major == 1 && minor == 0 && (patch == 4 || patch == 5 || patch == 6 || patch == 7)) {
+            uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
+            uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
+            uris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
+            uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+            uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
+            uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
+            uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
+            uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
+        } else if (major == 1 && minor == 0 && (patch == 8 || patch == 9)) {
+            uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
+            uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
+            uris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
+            uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+            uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
+            uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
+            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
+            uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
+            uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+        } else if (major == 1 && minor == 0 && patch == 10) {
+            uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
+            uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
+            uris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
+            uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+            uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
+            uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
+            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
+            uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
+            uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
+        } else if (major == 1 && minor == 0 && patch == 11) {
+            uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
+            uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
+            uris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
+            uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+            uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
+            uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
+            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
+            uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
+            uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
+            uris.put("sedml", URI.create("https://identifiers.org/combine.specifications/sed-ml"));
+        } else if (major == 1 && minor == 0 && patch == 12) {
+            uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
+            uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
+            uris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
+            uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+            uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
+            uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
+            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
+            uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
+            uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
+            uris.put("sedml", URI.create("https://identifiers.org/combine.specifications/sed-ml"));
 
-                uris.put("xlsx", URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"));
+            uris.put("xlsx", URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"));
 
-                // Image URIs
-                uris.put("bmp", URI.create("https://www.iana.org/assignments/media-types/image/bmp"));
-                uris.put("jpeg", URI.create("https://www.iana.org/assignments/media-types/image/jpeg"));
-                uris.put("tiff", URI.create("https://www.iana.org/assignments/media-types/image/tiff"));
-                uris.put("png", URI.create("http://purl.org/NET/mediatypes/image/png"));
-            }
-
-        } catch (URISyntaxException exception) {
-            // Does not occur since all the URLS entered here are valid.
+            // Image URIs
+            uris.put("bmp", URI.create("https://www.iana.org/assignments/media-types/image/bmp"));
+            uris.put("jpeg", URI.create("https://www.iana.org/assignments/media-types/image/jpeg"));
+            uris.put("tiff", URI.create("https://www.iana.org/assignments/media-types/image/tiff"));
+            uris.put("png", URI.create("http://purl.org/NET/mediatypes/image/png"));
         }
 
         return uris;
