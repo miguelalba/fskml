@@ -81,8 +81,14 @@ public class FSKML {
                 uris.put("rdata", new URI("http://purl.org/NET/mediatypes/x-RData"));
                 uris.put("csv", new URI("https://www.iana.org/assignments/media-types/text/csv"));
                 uris.put("sedml", new URI("https://identifiers.org/combine.specifications/sed-ml"));
-                uris.put("png", URI.create("http://purl.org/NET/mediatypes/image/png"));
+
                 uris.put("xlsx", URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"));
+
+                // Image URIs
+                uris.put("bmp", URI.create("https://www.iana.org/assignments/media-types/image/bmp"));
+                uris.put("jpeg", URI.create("https://www.iana.org/assignments/media-types/image/jpeg"));
+                uris.put("tiff", URI.create("https://www.iana.org/assignments/media-types/image/tiff"));
+                uris.put("png", URI.create("http://purl.org/NET/mediatypes/image/png"));
             }
 
         } catch (URISyntaxException exception) {

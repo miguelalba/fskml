@@ -236,6 +236,36 @@ public class FSKMLTest {
     }
 
     @Test
+    public void testGetURIS10_12() {
+
+        Map<String, URI> expectedUris = new HashMap<>();
+        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
+        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
+        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
+        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
+        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
+        expectedUris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
+        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
+        expectedUris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
+        expectedUris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+        expectedUris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
+        expectedUris.put("sedml", URI.create("https://identifiers.org/combine.specifications/sed-ml"));
+
+        expectedUris.put("xlsx", URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"));
+
+        // Image URIs
+        expectedUris.put("bmp", URI.create("https://www.iana.org/assignments/media-types/image/bmp"));
+        expectedUris.put("jpeg", URI.create("https://www.iana.org/assignments/media-types/image/jpeg"));
+        expectedUris.put("tiff", URI.create("https://www.iana.org/assignments/media-types/image/tiff"));
+        expectedUris.put("png", URI.create("http://purl.org/NET/mediatypes/image/png"));
+
+        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 12);
+        assertEquals(expectedUris, obtainedUris);
+    }
+
+    @Test
     public void testFindVersion1_0_0() throws Exception {
         File tempFile = File.createTempFile("archive", null);
         CombineArchive archive = create1_0_0_archive(tempFile);
