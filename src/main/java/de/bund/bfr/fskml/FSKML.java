@@ -4,13 +4,27 @@ import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.meta.MetaDataObject;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FSKML {
 
+    /**
+     * <p>Return map of URIS for a given version.</p>
+     *
+     * <p>
+     * Keys to URIs for each version:
+     * <ul>
+     * <li>1.0.0, 1.0.2, 1.0.3: r, zip</li>
+     * <li>1.0.4-7: zip, tgz, tar_gz, r, pmf, sbml, matlab, php</li>
+     * <li>1.0.8-9: zip, tgz, tar_gz, r, pmf, sbml, json, matlab, php, plain, rdata</li>
+     * <li>1.0.10: zip, tgz, tar_gz, r, pmf, sbml, json, matlab, php, plain, rdata, csv</li>
+     * <li>1.0.11: zip, tgz, tar_gz, r, pmf, sbml, json, matlab, php, plain, rdata, csv, sedml</li>
+     * <li>1.0.12: zip, tgz, tar_gz, r, pmf, sbml, json, matlab, php, plain, rdata, csv, sedml, xlsx, bmp, jpeg, tiff, png</li>
+     * </ul>
+     * </p>
+     */
     public static Map<String, URI> getURIS(int major, int minor, int patch) {
 
         Map<String, URI> uris = new HashMap<>();
