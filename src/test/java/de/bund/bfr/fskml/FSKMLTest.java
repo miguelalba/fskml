@@ -24,12 +24,9 @@ public class FSKMLTest {
     @Test
     public void testGetURIS100() {
 
-        Map<String, URI> expectedUris = new HashMap<>(2);
-        expectedUris.put("r", URI.create("http://www-r-project.org"));
-        expectedUris.put("zip", URI.create("http://www.iana.org/assignments/media-types/application/zip"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 0);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 0);
+        assertEquals(URI.create("http://www-r-project.org"), uris.get("r"));
+        assertEquals(URI.create("http://www.iana.org/assignments/media-types/application/zip"), uris.get("zip"));
     }
 
     /**
@@ -38,12 +35,9 @@ public class FSKMLTest {
     @Test
     public void testGetURIS102() {
 
-        Map<String, URI> expectedUris = new HashMap<>(2);
-        expectedUris.put("r", URI.create("http://www-r-project.org"));
-        expectedUris.put("zip", URI.create("http://www.iana.org/assignments/media-types/application/zip"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 2);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 2);
+        assertEquals(URI.create("http://www-r-project.org"), uris.get("r"));
+        assertEquals(URI.create("http://www.iana.org/assignments/media-types/application/zip"), uris.get("zip"));
     }
 
     /**
@@ -52,12 +46,9 @@ public class FSKMLTest {
     @Test
     public void testGetURIS103() {
 
-        Map<String, URI> expectedUris = new HashMap<>(2);
-        expectedUris.put("r", URI.create("http://www-r-project.org"));
-        expectedUris.put("zip", URI.create("http://www.iana.org/assignments/media-types/application/zip"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 3);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 3);
+        assertEquals(URI.create("http://www-r-project.org"), uris.get("r"));
+        assertEquals(URI.create("http://www.iana.org/assignments/media-types/application/zip"), uris.get("zip"));
     }
 
     /**
@@ -66,18 +57,15 @@ public class FSKMLTest {
     @Test
     public void testGetURIS104() throws URISyntaxException {
 
-        Map<String, URI> expectedUris = new HashMap<>(8);
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", new URI("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 4);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 4);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
     }
 
     /**
@@ -86,18 +74,15 @@ public class FSKMLTest {
     @Test
     public void testGetURIS105() {
 
-        Map<String, URI> expectedUris = new HashMap<>(8);
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 5);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 5);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
     }
 
     /**
@@ -106,18 +91,15 @@ public class FSKMLTest {
     @Test
     public void testGetURIS106() {
 
-        Map<String, URI> expectedUris = new HashMap<>(8);
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 6);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 6);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
     }
 
     /**
@@ -126,18 +108,15 @@ public class FSKMLTest {
     @Test
     public void testGetURIS107() {
 
-        Map<String, URI> expectedUris = new HashMap<>(8);
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 7);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 7);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
     }
 
     /**
@@ -146,21 +125,17 @@ public class FSKMLTest {
     @Test
     public void testGetURIS108() {
 
-        Map<String, URI> expectedUris = new HashMap<>();
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-        expectedUris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-        expectedUris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 8);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 8);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
     }
 
     /**
@@ -169,21 +144,17 @@ public class FSKMLTest {
     @Test
     public void testGetURIS109() {
 
-        Map<String, URI> expectedUris = new HashMap<>();
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-        expectedUris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-        expectedUris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 9);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 9);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
     }
 
     /**
@@ -192,22 +163,18 @@ public class FSKMLTest {
     @Test
     public void testGetURIS10_10() {
 
-        Map<String, URI> expectedUris = new HashMap<>();
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-        expectedUris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-        expectedUris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
-        expectedUris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 10);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 10);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/text/csv"), uris.get("csv"));
     }
 
     /**
@@ -216,53 +183,45 @@ public class FSKMLTest {
     @Test
     public void testGetURIS10_11() {
 
-        Map<String, URI> expectedUris = new HashMap<>();
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-        expectedUris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-        expectedUris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
-        expectedUris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
-        expectedUris.put("sedml", URI.create("https://identifiers.org/combine.specifications/sed-ml"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 11);
-        assertEquals(expectedUris, obtainedUris);
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 11);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/text/csv"), uris.get("csv"));
+        assertEquals(URI.create("https://identifiers.org/combine.specifications/sed-ml"), uris.get("sedml"));
     }
 
     @Test
     public void testGetURIS10_12() {
 
-        Map<String, URI> expectedUris = new HashMap<>();
-        expectedUris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
-        expectedUris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
-        expectedUris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
-        expectedUris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
-        expectedUris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
-        expectedUris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-        expectedUris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
-        expectedUris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
-        expectedUris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
-        expectedUris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-        expectedUris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
-        expectedUris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
-        expectedUris.put("sedml", URI.create("https://identifiers.org/combine.specifications/sed-ml"));
+        Map<String, URI> uris = FSKML.getURIS(1, 0, 12);
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/text/csv"), uris.get("csv"));
+        assertEquals(URI.create("https://identifiers.org/combine.specifications/sed-ml"), uris.get("sedml"));
 
-        expectedUris.put("xlsx", URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"), uris.get("xlsx"));
 
         // Image URIs
-        expectedUris.put("bmp", URI.create("https://www.iana.org/assignments/media-types/image/bmp"));
-        expectedUris.put("jpeg", URI.create("https://www.iana.org/assignments/media-types/image/jpeg"));
-        expectedUris.put("tiff", URI.create("https://www.iana.org/assignments/media-types/image/tiff"));
-        expectedUris.put("png", URI.create("http://purl.org/NET/mediatypes/image/png"));
-
-        Map<String, URI> obtainedUris = FSKML.getURIS(1, 0, 12);
-        assertEquals(expectedUris, obtainedUris);
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/image/bmp"), uris.get("bmp"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/image/jpeg"), uris.get("jpeg"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/image/tiff"), uris.get("tiff"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/image/png"), uris.get("png"));
     }
 
     @Test
