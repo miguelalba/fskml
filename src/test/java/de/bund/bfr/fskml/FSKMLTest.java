@@ -205,6 +205,7 @@ public class FSKMLTest {
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tgz"), uris.get("tgz"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"), uris.get("tar_gz"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/r"), uris.get("r"));
+        assertEquals(URI.create("http://purl.org/NET/mediatypes/application/python"), uris.get("py"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));

@@ -85,6 +85,7 @@ public class FSKML {
             uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
             uris.put("tar_gz", URI.create("http://purl.org/NET/mediatypes/application/x-tar.gz"));
             uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
+            uris.put("py", URI.create("http://purl.org/NET/mediatypes/application/python"));
             uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
             uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
             uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
