@@ -194,7 +194,7 @@ public class FSKMLTest {
         assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
         assertEquals(URI.create("https://www.iana.org/assignments/media-types/text/csv"), uris.get("csv"));
-        assertEquals(URI.create("https://identifiers.org/combine.specifications/sed-ml"), uris.get("sedml"));
+        assertEquals(URI.create("http://identifiers.org/combine.specifications/sed-ml"), uris.get("sedml"));
     }
 
     @Test
@@ -212,7 +212,7 @@ public class FSKMLTest {
         assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/x-RData"), uris.get("rdata"));
         assertEquals(URI.create("https://www.iana.org/assignments/media-types/text/csv"), uris.get("csv"));
-        assertEquals(URI.create("https://identifiers.org/combine.specifications/sed-ml"), uris.get("sedml"));
+        assertEquals(URI.create("http://identifiers.org/combine.specifications/sed-ml"), uris.get("sedml"));
 
         assertEquals(URI.create("https://www.iana.org/assignments/media-types/application/vnd.ms-excel"), uris.get("xlsx"));
 
