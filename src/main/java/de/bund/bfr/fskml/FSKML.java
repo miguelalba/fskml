@@ -60,7 +60,7 @@ public class FSKML {
             uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
             uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
             uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("json", URI.create("https://www.iana.org/assignments/media-types/application/json"));
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
@@ -73,7 +73,7 @@ public class FSKML {
             uris.put("r", URI.create("http://purl.org/NET/mediatypes/application/r"));
             uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
             uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("json", URI.create("https://www.iana.org/assignments/media-types/application/json"));
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
@@ -88,7 +88,7 @@ public class FSKML {
             uris.put("py", URI.create("http://purl.org/NET/mediatypes/application/python"));
             uris.put("pmf", URI.create("http://purl.org/NET/mediatypes/application/x-pmf"));
             uris.put("sbml", URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"));
-            uris.put("json", URI.create("https://wwww.iana.org/assignments/media-types/application/json"));
+            uris.put("json", URI.create("https://www.iana.org/assignments/media-types/application/json"));
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));

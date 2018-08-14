@@ -54,7 +54,7 @@ public class FSKMLTest {
      * Test FSKML#getURIS for 1.0.4.
      */
     @Test
-    public void testGetURIS104() throws URISyntaxException {
+    public void testGetURIS104() {
 
         Map<String, URI> uris = FSKML.getURIS(1, 0, 4);
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/zip"), uris.get("zip"));
@@ -208,6 +208,7 @@ public class FSKMLTest {
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/python"), uris.get("py"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/x-pmf"), uris.get("pmf"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/application/sbml+xml"), uris.get("sbml"));
+        assertEquals(URI.create("https://www.iana.org/assignments/media-types/application/json"), uris.get("json"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-matlab"), uris.get("matlab"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/text/x-php"), uris.get("php"));
         assertEquals(URI.create("http://purl.org/NET/mediatypes/text-xplain"), uris.get("plain"));
