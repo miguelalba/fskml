@@ -52,7 +52,7 @@ public class FSKML {
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/text/x-RData"));
         } else if (major == 1 && minor == 0 && patch == 10) {
             uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
             uris.put("tgz", URI.create("http://purl.org/NET/mediatypes/application/x-tgz"));
@@ -64,7 +64,7 @@ public class FSKML {
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/text/x-RData"));
             uris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
         } else if (major == 1 && minor == 0 && patch == 11) {
             uris.put("zip", URI.create("http://purl.org/NET/mediatypes/application/zip"));
@@ -77,7 +77,7 @@ public class FSKML {
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/text/x-RData"));
             uris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
             uris.put("sedml", URI.create("http://identifiers.org/combine.specifications/sed-ml"));
         } else if (major == 1 && minor == 0 && patch == 12) {
@@ -92,7 +92,7 @@ public class FSKML {
             uris.put("matlab", URI.create("http://purl.org/NET/mediatypes/text/x-matlab"));
             uris.put("php", URI.create("http://purl.org/NET/mediatypes/text/x-php"));
             uris.put("plain", URI.create("http://purl.org/NET/mediatypes/text-xplain"));
-            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/x-RData"));
+            uris.put("rdata", URI.create("http://purl.org/NET/mediatypes/text/x-RData"));
             uris.put("csv", URI.create("https://www.iana.org/assignments/media-types/text/csv"));
             uris.put("sedml", URI.create("http://identifiers.org/combine.specifications/sed-ml"));
 
