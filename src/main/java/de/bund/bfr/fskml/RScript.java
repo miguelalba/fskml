@@ -26,10 +26,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RScript {
-	private final String script;
-	private final List<String> libraries = new LinkedList<>();
-	private final List<String> sources = new LinkedList<>();
+public class RScript extends Script {
 
 	/**
 	 * Process R script.
@@ -106,30 +103,5 @@ public class RScript {
 		this(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
 	}
 
-	/**
-	 * Gets the R script.
-	 * 
-	 * @return the R script.
-	 */
-	public String getScript() {
-		return script;
-	}
 
-	/**
-	 * Gets the names of the source files linked in the R script.
-	 * 
-	 * @return the names of the source files linked in the R script.
-	 */
-	public List<String> getSources() {
-		return sources;
-	}
-
-	/**
-	 * Gets the names of the libraries imported in the R script.
-	 * 
-	 * @return the names of the libraries imported in the R script.
-	 */
-	public List<String> getLibraries() {
-		return libraries;
-	}
 }
