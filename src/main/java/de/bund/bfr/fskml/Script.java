@@ -2,7 +2,14 @@ package de.bund.bfr.fskml;
 
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * 
+ * abstract class that defines how a script is parsed in order to obtain the libraries, source files and the script proper.
+ * 
+ * 
+ * @author Thomas Schüler
+ *
+ */
 public abstract class Script {
   String script;
   final List<String> libraries = new LinkedList<>();
