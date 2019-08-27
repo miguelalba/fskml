@@ -32,30 +32,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven source plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Coveralls plugin -->
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.3.0</version>
-                <configuration>
-                    <repoToken>${COVERALLS_TOKEN} </repoToken>
-                </configuration>
-            </plugin>
-
             <!-- JaCoCo plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
