@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -713,7 +712,7 @@ public class FSKMLTest {
             // Add SEDML
             File sedmlFile = File.createTempFile("sedml", null);
             FileUtils.writeStringToFile(sedmlFile, "", "UTF-8");
-            archive.addEntry(sedmlFile, "sim.sedml", rawUris.get("sedml"));
+            archive.addEntry(sedmlFile, "de/bund/bfr/fskml/sim.sedml", rawUris.get("sedml"));
 
             sedmlFile.delete();
 
