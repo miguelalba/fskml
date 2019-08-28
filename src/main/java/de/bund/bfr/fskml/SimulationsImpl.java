@@ -1,18 +1,15 @@
 package de.bund.bfr.fskml;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public final class SimulationsImpl implements Simulations {
 
     private final int selected;
-    private final List<String> parameterIds;
-    private final Map<String, List<String>> values;
+    private final Map<String, Map<String, String>> values;
 
-    SimulationsImpl(int selected, List<String> parameterIds, Map<String, List<String>> values) {
+    SimulationsImpl(int selected, Map<String, Map<String, String>> values) {
         this.selected = selected;
-        this.parameterIds = Collections.unmodifiableList(parameterIds);
         this.values = Collections.unmodifiableMap(values);
     }
 
@@ -20,11 +17,7 @@ public final class SimulationsImpl implements Simulations {
         return selected;
     }
 
-    public List<String> getInputIds() {
-        return parameterIds;
-    }
-
-    public Map<String, List<String>> getInputValues() {
+    public Map<String, Map<String, String>> getInputValues() {
         return values;
     }
 }

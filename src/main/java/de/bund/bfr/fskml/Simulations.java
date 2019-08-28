@@ -11,12 +11,16 @@ public interface Simulations {
     int getSelectedIndex();
 
     /**
-     * @return Ids of input and constant parameters.
-     */
-    List<String> getInputIds();
-
-    /**
+     * Return nested map of simulation names and parameter values. The nested map keeps parameter ids:values.
+     * Example:
+     * <pre>
+     * {
+     *   'defaultSimulation': {'a': '1', 'b': '2', 'c': '3'},
+     *   'otherSimulation': {'a': '4', 'b': '5', 'c': '6'}
+     * }
+     * </pre>
+     *
      * @return Map of simulation names and list of input and constant parameter values for every simulation.
      */
-    Map<String, List<String>> getInputValues();
+    Map<String, Map<String, String>> getInputValues();
 }

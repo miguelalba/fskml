@@ -19,10 +19,15 @@ public class FSKXArchiveImplTest {
 
     private SimulationsImpl createExampleSimulations() {
         int selected = 0;
-        List<String> inputIds = Arrays.asList("n_iter", "Npos", "Ntotal");
-        Map<String, List<String>> inputValues = new HashMap<>();
-        inputValues.put("defaultSimulation", Arrays.asList("200", "30", "100"));
 
-        return new SimulationsImpl(selected, inputIds, inputValues);
+        Map<String, String> defaultSimulation = new HashMap<>();
+        defaultSimulation.put("n_iter", "200");
+        defaultSimulation.put("Npos", "30");
+        defaultSimulation.put("Ntotal", "100");
+
+        Map<String, Map<String, String>> values = new HashMap<>();
+        values.put("defaultSimulation", defaultSimulation);
+
+        return new SimulationsImpl(selected, values);
     }
 }
