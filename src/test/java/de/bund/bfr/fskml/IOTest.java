@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -40,5 +43,35 @@ public class IOTest {
         }
 
         return tempFile;
+    }
+
+    @Test
+    public void testWriteArchive() throws Exception {
+
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations());
+
+        File tempFile = File.createTempFile("archive", ".fskx");
+        tempFile.deleteOnExit();
+
+        IO.writeArchive(archive, tempFile, "r");
+        assert tempFile.exists();
+
+        try (CombineArchive ca = new CombineArchive(tempFile)) {
+            assert ca.hasEntriesWithFormat(IO.SEDML_URI);
+        }
+    }
+
+    private SimulationsImpl createExampleSimulations() {
+        int selected = 0;
+
+        Map<String, String> defaultSimulation = new HashMap<>();
+        defaultSimulation.put("n_iter", "200");
+        defaultSimulation.put("Npos", "30");
+        defaultSimulation.put("Ntotal", "100");
+
+        Map<String, Map<String, String>> values = new HashMap<>();
+        values.put("defaultSimulation", defaultSimulation);
+
+        return new SimulationsImpl(selected, Collections.singletonList("output"), values);
     }
 }
