@@ -17,9 +17,12 @@ public class IOTest {
 
         File file = createSampleArchive();
         FSKXArchive archive = IO.readArchive(file);
-        assertNotNull(archive.getSimulations());
-        assertEquals(3, archive.getSimulations().getSelectedIndex());
-        assertEquals(4, archive.getSimulations().getInputValues().size());
+        Simulations simulations = archive.getSimulations();
+
+        assertNotNull(simulations);
+        assertEquals(3, simulations.getSelectedIndex());
+        assertEquals("result", simulations.getOutputs().get(0));
+        assertEquals(4, simulations.getInputValues().size());
     }
 
     private File createSampleArchive() throws Exception {

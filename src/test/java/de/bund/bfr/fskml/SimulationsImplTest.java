@@ -2,6 +2,7 @@ package de.bund.bfr.fskml;
 
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,6 @@ public class SimulationsImplTest {
         Map<String, Map<String, String>> values = new HashMap<>();
         values.put("defaultSimulation", defaultSimulation);
 
-        return new SimulationsImpl(selected, values);
+        return new SimulationsImpl(selected, Collections.singletonList("result"), values);
     }
 }

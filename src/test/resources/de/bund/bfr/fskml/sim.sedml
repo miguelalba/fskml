@@ -48,7 +48,13 @@
     <task id="task2" name="" modelReference="bebe" simulationReference="steadyState" />
     <task id="task3" name="" modelReference="agua" simulationReference="steadyState" />
   </listOfTasks>
-  <listOfDataGenerators />
+  <listOfDataGenerators>
+    <dataGenerator id="result">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <ci>result</ci>
+      </math>
+    </dataGenerator>
+  </listOfDataGenerators>
   <listOfOutputs>
     <plot2D id="plot1" name="">
       <annotation>

@@ -2,10 +2,7 @@ package de.bund.bfr.fskml;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -28,6 +25,6 @@ public class FSKXArchiveImplTest {
         Map<String, Map<String, String>> values = new HashMap<>();
         values.put("defaultSimulation", defaultSimulation);
 
-        return new SimulationsImpl(selected, values);
+        return new SimulationsImpl(selected, Collections.singletonList("output"), values);
     }
 }

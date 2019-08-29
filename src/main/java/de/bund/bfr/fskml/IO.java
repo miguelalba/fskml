@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,7 @@ class IO {
             selectedIndex = 0;
         }
 
+        List<String> outputs = sedml.getDataGenerators().stream().map(DataGenerator::getId).collect(Collectors.toList());
 
         Map<String, Map<String, String>> values = new HashMap<>(sedml.getModels().size());
         for (Model model : sedml.getModels()) {
@@ -59,6 +61,6 @@ class IO {
             values.put(model.getId(), simulation);
         }
 
-        return new SimulationsImpl(selectedIndex, values);
+        return new SimulationsImpl(selectedIndex, outputs, values);
     }
 }
