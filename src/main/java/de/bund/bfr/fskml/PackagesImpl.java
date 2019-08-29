@@ -1,11 +1,8 @@
 package de.bund.bfr.fskml;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /*
