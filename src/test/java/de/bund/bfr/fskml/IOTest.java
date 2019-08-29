@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class IOTest {
 
@@ -26,6 +27,13 @@ public class IOTest {
         assertEquals(3, simulations.getSelectedIndex());
         assertEquals("result", simulations.getOutputs().get(0));
         assertEquals(4, simulations.getInputValues().size());
+
+
+        //packages
+        assertNotNull(archive.getPackages());
+        assertEquals("R",archive.getPackages().getLanguage());
+        assertTrue(archive.getPackages().getPackages().containsKey("triangle"));
+        assertTrue(archive.getPackages().getPackages().containsValue("0.12"));
     }
 
     private File createSampleArchive() throws Exception {
@@ -39,6 +47,10 @@ public class IOTest {
             File sedmlFile = new File(IOTest.class.getResource("sim.sedml").getFile());
             ArchiveEntry entry = archive.addEntry(sedmlFile, "sim.sedml", URI.create("http://identifiers.org/combine.specifications/sed-ml"));
 
+            //add packages file
+            File packagesFile = new File(IOTest.class.getResource("jsonPackages.json").getFile());
+            archive.addEntry(packagesFile,"jsonPackages.json",URI.create("https://www.iana.org/assignments/media-types/application/json"));
+
             archive.pack();
         }
 
@@ -48,7 +60,7 @@ public class IOTest {
     @Test
     public void testWriteArchive() throws Exception {
 
-        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations());
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(),createExamplePackages());
 
         File tempFile = File.createTempFile("archive", ".fskx");
         tempFile.deleteOnExit();
@@ -73,5 +85,12 @@ public class IOTest {
         values.put("defaultSimulation", defaultSimulation);
 
         return new SimulationsImpl(selected, Collections.singletonList("output"), values);
+    }
+    private PackagesImpl createExamplePackages(){
+        String language = "R";
+        Map<String,String> packages = new HashMap<>();
+        packages.put("triangle","0.12");
+        packages.put("ggplot","1.23");
+        return new PackagesImpl(language,packages);
     }
 }

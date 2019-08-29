@@ -6,4 +6,5 @@ public interface FSKXArchive {
      * @return simulations
      */
     Simulations getSimulations();
+    Packages getPackages();
 }

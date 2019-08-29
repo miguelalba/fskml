@@ -10,7 +10,7 @@ public class FSKXArchiveImplTest {
 
     @Test
     public void test() {
-        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations());
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(),createExamplePackages());
         assertNotNull(archive.getSimulations());
     }
 
@@ -26,5 +26,12 @@ public class FSKXArchiveImplTest {
         values.put("defaultSimulation", defaultSimulation);
 
         return new SimulationsImpl(selected, Collections.singletonList("output"), values);
+    }
+    private PackagesImpl createExamplePackages(){
+        String language = "R";
+        Map<String,String> packages = new HashMap<>();
+        packages.put("triangle","0.12");
+        packages.put("ggplot","1.23");
+        return new PackagesImpl(language,packages);
     }
 }

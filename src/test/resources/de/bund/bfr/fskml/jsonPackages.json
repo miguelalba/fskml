@@ -1,0 +1,7 @@
+{
+  "language": "R",
+  "packages": {
+    "triangle": "0.12",
+    "ggplot": "0.12"
+  }
+}

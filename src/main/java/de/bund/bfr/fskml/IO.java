@@ -5,6 +5,9 @@ import de.bund.bfr.fskml.sedml.SourceScript;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 import org.jdom2.JDOMException;
@@ -23,10 +26,12 @@ import java.util.stream.Collectors;
 class IO {
 
     static final URI SEDML_URI = URI.create("http://identifiers.org/combine.specifications/sed-ml");
+    static final URI JSON_PKG_URI = URI.create("https://www.iana.org/assignments/media-types/application/json");
 
     static FSKXArchive readArchive(File file) throws CombineArchiveException, ParseException, IOException, XMLException, org.jdom2.JDOMException, DataConversionException {
 
         Simulations sim = null;
+        Packages pack = null;
 
         try (CombineArchive archive = new CombineArchive(file)) {
             if (archive.hasEntriesWithFormat(SEDML_URI)) {
@@ -38,9 +43,18 @@ class IO {
 
                 tempFile.delete();
             }
+            if(archive.hasEntriesWithFormat(JSON_PKG_URI)){
+                ArchiveEntry packageEntry = archive.getEntriesWithFormat(JSON_PKG_URI).get(0);
+                File tempFile = File.createTempFile("packages", ".json");
+                packageEntry.extractFile(tempFile);
+
+
+                pack = readPackages(tempFile);
+                tempFile.delete();
+            }
         }
 
-        return new FSKXArchiveImpl(sim);
+        return new FSKXArchiveImpl(sim, pack);
     }
 
     static void writeArchive(FSKXArchive archive, File file, String scriptExtension) throws JDOMException, CombineArchiveException, ParseException, IOException, TransformerException {
@@ -132,4 +146,12 @@ class IO {
 
         return doc;
     }
+    static Packages readPackages(File jsonFile) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        return mapper.readValue(jsonFile,PackagesImpl.class);
+    }
+
+
 }
