@@ -32,7 +32,7 @@ import org.jdom.Element;
  */
 public class FskSimulationType extends Element {
 
-    enum Type {deterministic, statistic, probabilistic };
+    enum Type {deterministic, statistic, probabilistic }
 
     /**
      * Build new FskSimulationType.

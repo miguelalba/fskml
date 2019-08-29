@@ -7,8 +7,6 @@ import de.unirostock.sems.cbarchive.meta.MetaDataObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public class WorkspaceEntry {

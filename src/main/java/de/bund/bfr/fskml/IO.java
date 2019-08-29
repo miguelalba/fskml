@@ -1,11 +1,12 @@
 package de.bund.bfr.fskml;
 
+import de.bund.bfr.fskml.sedml.SelectedSimulation;
 import de.bund.bfr.fskml.sedml.SourceScript;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
+import org.jdom.DataConversionException;
 import org.jdom.Element;
-import org.jdom.Text;
 import org.jdom2.JDOMException;
 import org.jlibsedml.*;
 
@@ -23,7 +24,7 @@ class IO {
 
     static final URI SEDML_URI = URI.create("http://identifiers.org/combine.specifications/sed-ml");
 
-    static FSKXArchive readArchive(File file) throws CombineArchiveException, ParseException, IOException, XMLException, org.jdom2.JDOMException {
+    static FSKXArchive readArchive(File file) throws CombineArchiveException, ParseException, IOException, XMLException, org.jdom2.JDOMException, DataConversionException {
 
         Simulations sim = null;
 
@@ -59,7 +60,7 @@ class IO {
         }
     }
 
-    private static Simulations readSimulations(File sedmlFile) throws XMLException {
+    private static Simulations readSimulations(File sedmlFile) throws XMLException, DataConversionException {
 
         SedML sedml = Libsedml.readDocument(sedmlFile).getSedMLModel();
 
@@ -67,8 +68,8 @@ class IO {
         final int selectedIndex;
         if (sedml.getAnnotation().size() == 1) {
             Annotation annotation = sedml.getAnnotation().get(0);
-            Text e = (Text) annotation.getAnnotationElement().getContent().get(0);
-            selectedIndex = Integer.parseInt(e.getText());
+            Element element = annotation.getAnnotationElementsList().get(0);
+            selectedIndex = new SelectedSimulation(element).getIndex();
         } else {
             selectedIndex = 0;
         }
@@ -103,9 +104,7 @@ class IO {
         sedml.addSimulation(simulation);
 
         // Add selected simulation index
-        Element selectedSimulationElement = new Element("selectedSimulation");
-        selectedSimulationElement.setAttribute("id", Integer.toString(simulations.getSelectedIndex()));
-        sedml.addAnnotation(new Annotation(selectedSimulationElement));
+        sedml.addAnnotation(new Annotation(new SelectedSimulation(simulations.getSelectedIndex())));
 
         for (Map.Entry<String, Map<String, String>> simulationEntry : simulations.getInputValues().entrySet()) {
 
@@ -116,12 +115,9 @@ class IO {
             // Add task
             sedml.addTask(new Task("task" + sedml.getTasks().size(), "", sedmlModel.getId(), simulation.getId()));
 
-            // Add changes to model
+            // Add changes to model: keys are parameter names and values are parameter values
             for (Map.Entry<String, String> entry : simulationEntry.getValue().entrySet()) {
-                String parameterName = entry.getKey();
-                String parameterValue = entry.getValue();
-
-                ChangeAttribute change = new ChangeAttribute(new XPathTarget(parameterName), parameterValue);
+                ChangeAttribute change = new ChangeAttribute(new XPathTarget(entry.getKey()), entry.getValue());
                 sedmlModel.addChange(change);
             }
         }

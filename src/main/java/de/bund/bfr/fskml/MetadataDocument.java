@@ -448,7 +448,7 @@ public class MetadataDocument {
             if (v.type == DataType.integer) {
                 param.setValue(Double.valueOf(v.value).intValue());
             } else if (v.type == DataType.numeric) {
-                param.setValue(Double.valueOf(v.value));
+                param.setValue(Double.parseDouble(v.value));
             } else if (v.type == DataType.array) {
                 param.setValue(0);
 
