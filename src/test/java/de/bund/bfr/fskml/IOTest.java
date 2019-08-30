@@ -1,10 +1,12 @@
 package de.bund.bfr.fskml;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,6 +72,7 @@ public class IOTest {
 
         try (CombineArchive ca = new CombineArchive(tempFile)) {
             assert ca.hasEntriesWithFormat(IO.SEDML_URI);
+            assert ca.hasEntriesWithFormat(IO.JSON_PKG_URI);
         }
     }
 
@@ -93,4 +96,5 @@ public class IOTest {
         packages.put("ggplot","1.23");
         return new PackagesImpl(language,packages);
     }
+
 }

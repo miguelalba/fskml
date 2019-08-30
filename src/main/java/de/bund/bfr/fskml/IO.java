@@ -65,10 +65,14 @@ class IO {
             File sedmlFile = File.createTempFile("simulation", ".sedml");
             SEDMLDocument doc = createSedml(archive.getSimulations(), scriptExtension);
             doc.writeDocument(sedmlFile);
-
             combineArchive.addEntry(sedmlFile, "simulation.sedml", SEDML_URI);
-
             sedmlFile.delete();
+            //Add packages as Json file
+            File jsonFile = createPackagesFile(archive.getPackages());
+            //String jsonString = createPackageJson(archive.getPackages());
+            combineArchive.addEntry(jsonFile, "packages.json", JSON_PKG_URI);
+            jsonFile.delete();
+
 
             combineArchive.pack();
         }
@@ -153,5 +157,20 @@ class IO {
         return mapper.readValue(jsonFile,PackagesImpl.class);
     }
 
+    static String createPackagesJson(Packages packages) throws IOException{
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(packages);
+        return json;
+    }
+    static File createPackagesFile(Packages packages) throws IOException{
+
+        File file = File.createTempFile("packages", ".json");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file,packages);
+
+        return file;
+    }
 
 }
