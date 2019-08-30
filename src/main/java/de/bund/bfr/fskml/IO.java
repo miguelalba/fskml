@@ -5,8 +5,6 @@ import de.bund.bfr.fskml.sedml.SourceScript;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
@@ -17,6 +15,8 @@ import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -26,35 +26,54 @@ import java.util.stream.Collectors;
 class IO {
 
     static final URI SEDML_URI = URI.create("http://identifiers.org/combine.specifications/sed-ml");
-    static final URI JSON_PKG_URI = URI.create("https://www.iana.org/assignments/media-types/application/json");
+    static final URI JSON_URI = URI.create("https://www.iana.org/assignments/media-types/application/json");
+    static final URI PLAIN_URI = URI.create("http://purl.org/NET/mediatypes/text-xplain");
 
     static FSKXArchive readArchive(File file) throws CombineArchiveException, ParseException, IOException, XMLException, org.jdom2.JDOMException, DataConversionException {
 
         Simulations sim = null;
         Packages pack = null;
+        String readme = "";
 
         try (CombineArchive archive = new CombineArchive(file)) {
+
             if (archive.hasEntriesWithFormat(SEDML_URI)) {
                 ArchiveEntry simulationEntry = archive.getEntriesWithFormat(SEDML_URI).get(0);
                 File tempFile = File.createTempFile("simulation", ".sedml");
                 simulationEntry.extractFile(tempFile);
 
                 sim = readSimulations(tempFile);
-
                 tempFile.delete();
             }
-            if(archive.hasEntriesWithFormat(JSON_PKG_URI)){
-                ArchiveEntry packageEntry = archive.getEntriesWithFormat(JSON_PKG_URI).get(0);
+
+            if (archive.hasEntriesWithFormat(JSON_URI)) {
+                ArchiveEntry packageEntry = archive.getEntriesWithFormat(JSON_URI).get(0);
                 File tempFile = File.createTempFile("packages", ".json");
                 packageEntry.extractFile(tempFile);
-
 
                 pack = readPackages(tempFile);
                 tempFile.delete();
             }
+
+            if (archive.hasEntriesWithFormat(PLAIN_URI)) {
+                for (ArchiveEntry entry : archive.getEntriesWithFormat(PLAIN_URI)) {
+                    // README entry is the only entry with PLAIN_URI and a description
+                    if (entry.getDescriptions().size() > 0) {
+                        Path tempFile = Files.createTempFile("README", ".txt");
+                        try {
+                            entry.extractFile(tempFile.toFile());
+                            readme = Files.readAllLines(tempFile).get(0);
+                        } finally {
+                            Files.delete(tempFile);
+                        }
+
+                        break;
+                    }
+                }
+            }
         }
 
-        return new FSKXArchiveImpl(sim, pack);
+        return new FSKXArchiveImpl(sim, pack, readme);
     }
 
     static void writeArchive(FSKXArchive archive, File file, String scriptExtension) throws JDOMException, CombineArchiveException, ParseException, IOException, TransformerException {
@@ -67,12 +86,23 @@ class IO {
             doc.writeDocument(sedmlFile);
             combineArchive.addEntry(sedmlFile, "simulation.sedml", SEDML_URI);
             sedmlFile.delete();
-            //Add packages as Json file
+
+            // Add packages as Json file
             File jsonFile = createPackagesFile(archive.getPackages());
-            //String jsonString = createPackageJson(archive.getPackages());
-            combineArchive.addEntry(jsonFile, "packages.json", JSON_PKG_URI);
+            combineArchive.addEntry(jsonFile, "packages.json", JSON_URI);
             jsonFile.delete();
 
+            // Add readme
+            if (archive.getReadme() != null && !archive.getReadme().isEmpty()) {
+                // Create temporary file with README to be added to archive
+                Path readmeFile = Files.createTempFile("README", ".txt");
+                Files.write(readmeFile, archive.getReadme().getBytes());
+
+                // Copy temporary file to archive
+                ArchiveEntry readmeEntry = combineArchive.addEntry(readmeFile.toFile(), "README.txt", PLAIN_URI);
+
+                Files.delete(readmeFile);
+            }
 
             combineArchive.pack();
         }
@@ -150,25 +180,27 @@ class IO {
 
         return doc;
     }
+
     static Packages readPackages(File jsonFile) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        return mapper.readValue(jsonFile,PackagesImpl.class);
+        return mapper.readValue(jsonFile, PackagesImpl.class);
     }
 
-    static String createPackagesJson(Packages packages) throws IOException{
+    static String createPackagesJson(Packages packages) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
 
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(packages);
         return json;
     }
-    static File createPackagesFile(Packages packages) throws IOException{
+
+    static File createPackagesFile(Packages packages) throws IOException {
 
         File file = File.createTempFile("packages", ".json");
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file,packages);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, packages);
 
         return file;
     }

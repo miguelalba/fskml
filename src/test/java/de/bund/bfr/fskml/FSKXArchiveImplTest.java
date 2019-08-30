@@ -4,14 +4,19 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class FSKXArchiveImplTest {
 
     @Test
     public void test() {
-        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(),createExamplePackages());
+        String exampleReadme = "Example readme bla bla bla ...";
+
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(), createExamplePackages(), exampleReadme);
         assertNotNull(archive.getSimulations());
+        assertNotNull(archive.getPackages());
+        assertEquals(exampleReadme, archive.getReadme());
     }
 
     private SimulationsImpl createExampleSimulations() {
@@ -27,6 +32,7 @@ public class FSKXArchiveImplTest {
 
         return new SimulationsImpl(selected, Collections.singletonList("output"), values);
     }
+
     private PackagesImpl createExamplePackages(){
         String language = "R";
         Map<String,String> packages = new HashMap<>();

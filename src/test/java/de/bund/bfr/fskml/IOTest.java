@@ -1,20 +1,16 @@
 package de.bund.bfr.fskml;
 
-
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class IOTest {
 
@@ -30,12 +26,32 @@ public class IOTest {
         assertEquals("result", simulations.getOutputs().get(0));
         assertEquals(4, simulations.getInputValues().size());
 
-
-        //packages
+        // Packages
         assertNotNull(archive.getPackages());
-        assertEquals("R",archive.getPackages().getLanguage());
+        assertEquals("R", archive.getPackages().getLanguage());
         assertTrue(archive.getPackages().getPackages().containsKey("triangle"));
         assertTrue(archive.getPackages().getPackages().containsValue("0.12"));
+
+        assertNotNull(archive.getReadme());
+        assertFalse(archive.getReadme().isEmpty());
+    }
+
+    @Test
+    public void testWriteArchive() throws Exception {
+
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(), createExamplePackages(), "readme");
+
+        File tempFile = File.createTempFile("archive", ".fskx");
+        tempFile.deleteOnExit();
+
+        IO.writeArchive(archive, tempFile, "r");
+        assert tempFile.exists();
+
+        try (CombineArchive ca = new CombineArchive(tempFile)) {
+            assert ca.hasEntriesWithFormat(IO.SEDML_URI);
+            assert ca.hasEntriesWithFormat(IO.JSON_URI);
+            assert ca.hasEntriesWithFormat(IO.PLAIN_URI);
+        }
     }
 
     private File createSampleArchive() throws Exception {
@@ -47,33 +63,21 @@ public class IOTest {
         try (CombineArchive archive = new CombineArchive(tempFile)) {
             // Add simulation file
             File sedmlFile = new File(IOTest.class.getResource("sim.sedml").getFile());
-            ArchiveEntry entry = archive.addEntry(sedmlFile, "sim.sedml", URI.create("http://identifiers.org/combine.specifications/sed-ml"));
+            ArchiveEntry entry = archive.addEntry(sedmlFile, "sim.sedml", IO.SEDML_URI);
 
-            //add packages file
-            File packagesFile = new File(IOTest.class.getResource("jsonPackages.json").getFile());
-            archive.addEntry(packagesFile,"jsonPackages.json",URI.create("https://www.iana.org/assignments/media-types/application/json"));
+            // Add packages file
+            File packagesFile = new File(IOTest.class.getResource("packages.json").getFile());
+            archive.addEntry(packagesFile, "packages.json", IO.JSON_URI);
+
+            // Add readme
+            File readmeFile = new File(IOTest.class.getResource("README.txt").getFile());
+            ArchiveEntry readmeEntry = archive.addEntry(readmeFile, "README.txt", IO.PLAIN_URI);
+            readmeEntry.addDescription(new FskMetaDataObject(FskMetaDataObject.ResourceType.readme).metaDataObject);
 
             archive.pack();
         }
 
         return tempFile;
-    }
-
-    @Test
-    public void testWriteArchive() throws Exception {
-
-        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(),createExamplePackages());
-
-        File tempFile = File.createTempFile("archive", ".fskx");
-        tempFile.deleteOnExit();
-
-        IO.writeArchive(archive, tempFile, "r");
-        assert tempFile.exists();
-
-        try (CombineArchive ca = new CombineArchive(tempFile)) {
-            assert ca.hasEntriesWithFormat(IO.SEDML_URI);
-            assert ca.hasEntriesWithFormat(IO.JSON_PKG_URI);
-        }
     }
 
     private SimulationsImpl createExampleSimulations() {
@@ -89,12 +93,13 @@ public class IOTest {
 
         return new SimulationsImpl(selected, Collections.singletonList("output"), values);
     }
-    private PackagesImpl createExamplePackages(){
+
+    private PackagesImpl createExamplePackages() {
         String language = "R";
-        Map<String,String> packages = new HashMap<>();
-        packages.put("triangle","0.12");
-        packages.put("ggplot","1.23");
-        return new PackagesImpl(language,packages);
+        Map<String, String> packages = new HashMap<>();
+        packages.put("triangle", "0.12");
+        packages.put("ggplot", "1.23");
+        return new PackagesImpl(language, packages);
     }
 
 }

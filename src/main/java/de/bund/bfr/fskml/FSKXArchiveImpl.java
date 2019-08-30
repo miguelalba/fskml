@@ -4,11 +4,12 @@ public class FSKXArchiveImpl implements FSKXArchive {
 
     private final Simulations simulations;
     private final Packages packages;
+    private final String readme;
 
-    FSKXArchiveImpl(Simulations simulations, Packages packages)
-    {
+    FSKXArchiveImpl(Simulations simulations, Packages packages, String readme) {
         this.simulations = simulations;
         this.packages = packages;
+        this.readme = readme;
     }
 
     @Override
@@ -17,8 +18,12 @@ public class FSKXArchiveImpl implements FSKXArchive {
     }
 
     @Override
-    public Packages getPackages(){
+    public Packages getPackages() {
         return packages;
     }
 
+    @Override
+    public String getReadme() {
+        return readme;
+    }
 }
