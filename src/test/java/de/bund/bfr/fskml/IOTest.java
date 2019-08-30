@@ -1,6 +1,6 @@
 package de.bund.bfr.fskml;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import org.junit.Test;
