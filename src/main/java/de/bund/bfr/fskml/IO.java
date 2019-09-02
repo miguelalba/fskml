@@ -5,10 +5,14 @@ import de.bund.bfr.fskml.sedml.SourceScript;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
+import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
+import de.unirostock.sems.cbarchive.meta.MetaDataObject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
+import org.jdom2.DefaultJDOMFactory;
 import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jlibsedml.*;
 
 import javax.xml.transform.TransformerException;
@@ -34,6 +38,7 @@ class IO {
         Simulations sim = null;
         Packages pack = null;
         String readme = "";
+        String version = "";
 
         try (CombineArchive archive = new CombineArchive(file)) {
 
@@ -71,9 +76,13 @@ class IO {
                     }
                 }
             }
+
+            if (archive.getDescriptions().size() > 0) {
+                version = readVersion(archive);
+            }
         }
 
-        return new FSKXArchiveImpl(sim, pack, readme);
+        return new FSKXArchiveImpl(sim, pack, readme, version);
     }
 
     static void writeArchive(FSKXArchive archive, File file, String scriptExtension) throws JDOMException, CombineArchiveException, ParseException, IOException, TransformerException {
@@ -103,6 +112,8 @@ class IO {
 
                 Files.delete(readmeFile);
             }
+
+            addVersion(combineArchive, archive.getVersion());
 
             combineArchive.pack();
         }
@@ -181,22 +192,12 @@ class IO {
         return doc;
     }
 
-    static Packages readPackages(File jsonFile) throws IOException {
-
+    private static Packages readPackages(File jsonFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
         return mapper.readValue(jsonFile, PackagesImpl.class);
     }
 
-    static String createPackagesJson(Packages packages) throws IOException {
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(packages);
-        return json;
-    }
-
-    static File createPackagesFile(Packages packages) throws IOException {
+    private static File createPackagesFile(Packages packages) throws IOException {
 
         File file = File.createTempFile("packages", ".json");
         ObjectMapper mapper = new ObjectMapper();
@@ -205,4 +206,24 @@ class IO {
         return file;
     }
 
+    private static void addVersion(CombineArchive archive, String version) {
+        DefaultJDOMFactory factory = new DefaultJDOMFactory();
+        Namespace dcTermsNamespace = Namespace.getNamespace("dcterms", "http://purl.org/dc/terms/");
+
+        org.jdom2.Element conformsToNode = factory.element("conformsTo", dcTermsNamespace);
+        conformsToNode.setText(version);
+
+        org.jdom2.Element element = factory.element("element");
+        element.addContent(conformsToNode);
+
+        archive.addDescription(new DefaultMetaDataObject(element));
+    }
+
+    private static String readVersion(CombineArchive archive) {
+
+        MetaDataObject metaDataObject = archive.getDescriptions().get(0);
+        org.jdom2.Element element = metaDataObject.getXmlDescription();
+
+        return "";
+    }
 }

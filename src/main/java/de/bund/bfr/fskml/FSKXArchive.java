@@ -16,4 +16,9 @@ public interface FSKXArchive {
      * @return readme
      */
     String getReadme();
+
+    /**
+     * @return archive version.
+     */
+    String getVersion();
 }

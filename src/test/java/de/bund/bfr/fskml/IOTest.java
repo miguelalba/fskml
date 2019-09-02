@@ -32,6 +32,7 @@ public class IOTest {
         assertTrue(archive.getPackages().getPackages().containsKey("triangle"));
         assertTrue(archive.getPackages().getPackages().containsValue("0.12"));
 
+        // Readme
         assertNotNull(archive.getReadme());
         assertFalse(archive.getReadme().isEmpty());
     }
@@ -39,7 +40,7 @@ public class IOTest {
     @Test
     public void testWriteArchive() throws Exception {
 
-        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(), createExamplePackages(), "readme");
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(), createExamplePackages(), "readme", "2.0");
 
         File tempFile = File.createTempFile("archive", ".fskx");
         tempFile.deleteOnExit();

@@ -13,7 +13,7 @@ public class FSKXArchiveImplTest {
     public void test() {
         String exampleReadme = "Example readme bla bla bla ...";
 
-        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(), createExamplePackages(), exampleReadme);
+        FSKXArchive archive = new FSKXArchiveImpl(createExampleSimulations(), createExamplePackages(), exampleReadme, "2.0");
         assertNotNull(archive.getSimulations());
         assertNotNull(archive.getPackages());
         assertEquals(exampleReadme, archive.getReadme());
