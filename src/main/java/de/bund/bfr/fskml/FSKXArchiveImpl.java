@@ -1,5 +1,11 @@
 package de.bund.bfr.fskml;
 
+import de.unirostock.sems.cbarchive.ArchiveEntry;
+
+import java.io.File;
+import java.util.List;
+import java.util.Set;
+
 public class FSKXArchiveImpl implements FSKXArchive {
 
     private final Simulations simulations;
@@ -7,11 +13,15 @@ public class FSKXArchiveImpl implements FSKXArchive {
     private final String readme;
     private final String version;
 
-    FSKXArchiveImpl(Simulations simulations, Packages packages, String readme, String version) {
+
+
+    FSKXArchiveImpl(Simulations simulations, Packages packages, String readme,  String version) {
         this.simulations = simulations;
         this.packages = packages;
         this.readme = readme;
         this.version = version;
+
+
     }
 
     @Override
@@ -33,4 +43,8 @@ public class FSKXArchiveImpl implements FSKXArchive {
     public String getVersion() {
         return version;
     }
+
+
+
+
 }

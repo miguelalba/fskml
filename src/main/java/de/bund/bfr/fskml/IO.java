@@ -7,6 +7,7 @@ import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
 import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
 import de.unirostock.sems.cbarchive.meta.MetaDataObject;
+import org.apache.commons.io.FilenameUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
@@ -33,7 +34,28 @@ class IO {
     static final URI JSON_URI = URI.create("https://www.iana.org/assignments/media-types/application/json");
     static final URI PLAIN_URI = URI.create("http://purl.org/NET/mediatypes/text-xplain");
 
+    enum ResourceType {
+
+        bmp(URI.create("http://purl.org/NET/mediatypes/bmp")),
+        csv(URI.create("http://purl.org/NET/mediatypes/csv")),
+        jpeg(URI.create("http://purl.org/NET/mediatypes/jpeg")),
+        png(URI.create("http://purl.org/NET/mediatypes/png")),
+        rdata(URI.create("http://purl.org/NET/mediatypes/rdata")),
+        svg(URI.create("http://purl.org/NET/mediatypes/svg")),
+        tiff(URI.create("http://purl.org/NET/mediatypes/tiff")),
+        txt(URI.create("http://purl.org/NET/mediatypes/text-xplain")),
+        xls(URI.create("http://purl.org/NET/mediatypes/xls")),
+        xlsx(URI.create("http://purl.org/NET/mediatypes/xlsx"));
+
+        final URI uri;
+
+        ResourceType(URI uri) {
+            this.uri = uri;
+        }
+    }
+
     static FSKXArchive readArchive(File file) throws CombineArchiveException, ParseException, IOException, XMLException, org.jdom2.JDOMException, DataConversionException {
+
 
         Simulations sim = null;
         Packages pack = null;
@@ -77,6 +99,8 @@ class IO {
                 }
             }
 
+            //
+
             if (archive.getDescriptions().size() > 0) {
                 version = readVersion(archive);
             }
@@ -85,7 +109,7 @@ class IO {
         return new FSKXArchiveImpl(sim, pack, readme, version);
     }
 
-    static void writeArchive(FSKXArchive archive, File file, String scriptExtension) throws JDOMException, CombineArchiveException, ParseException, IOException, TransformerException {
+    static void writeArchive(FSKXArchive archive, File file, List<File> resources, String scriptExtension) throws JDOMException, CombineArchiveException, ParseException, IOException, TransformerException {
 
         try (CombineArchive combineArchive = new CombineArchive(file)) {
 
@@ -112,6 +136,34 @@ class IO {
 
                 Files.delete(readmeFile);
             }
+
+            // Add resource files
+            for (final File resourceFile : resources) {
+
+                if (FilenameUtils.isExtension( resourceFile.getName(), "txt")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.txt.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "RData")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.rdata.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "csv")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.csv.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "png")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.png.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "bmp")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.bmp.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "tiff")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.tiff.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "jpeg")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.jpeg.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "svg")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.svg.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "xls")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.xls.uri);
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "xlsx")) {
+                    combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.xlsx.uri);
+                }
+            }
+
+
 
             addVersion(combineArchive, archive.getVersion());
 

@@ -1,5 +1,9 @@
 package de.bund.bfr.fskml;
 
+import de.unirostock.sems.cbarchive.ArchiveEntry;
+
+import java.util.Set;
+
 public interface FSKXArchive {
 
     /**
@@ -21,4 +25,6 @@ public interface FSKXArchive {
      * @return archive version.
      */
     String getVersion();
+
+
 }

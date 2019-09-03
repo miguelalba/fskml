@@ -2,12 +2,13 @@ package de.bund.bfr.fskml;
 
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
@@ -44,8 +45,7 @@ public class IOTest {
 
         File tempFile = File.createTempFile("archive", ".fskx");
         tempFile.deleteOnExit();
-
-        IO.writeArchive(archive, tempFile, "r");
+        IO.writeArchive(archive, tempFile, createSampleResources(),"r");
         assert tempFile.exists();
 
         try (CombineArchive ca = new CombineArchive(tempFile)) {
@@ -54,7 +54,36 @@ public class IOTest {
             assert ca.hasEntriesWithFormat(IO.PLAIN_URI);
         }
     }
+    private List<File> createSampleResources() throws Exception{
+        List<File> resList = new ArrayList<File>();
 
+        // Adds resources
+        File pngFile = new File(IOTest.class.getResource("resource.png").getFile());
+        resList.add(pngFile);
+
+        File jpegFile = new File(IOTest.class.getResource("resource.jpeg").getFile());
+        resList.add(jpegFile);
+
+        File tiffFile = new File(IOTest.class.getResource("resource.tiff").getFile());
+        resList.add(tiffFile);
+
+        File svgFile = new File(IOTest.class.getResource("resource.svg").getFile());
+        resList.add(svgFile);
+
+        File rDataFile = new File(IOTest.class.getResource("resource.rData").getFile());
+        resList.add(rDataFile);
+
+        File bmpFile = new File(IOTest.class.getResource("resource.bmp").getFile());
+        resList.add(bmpFile);
+
+        File xlsFile = new File(IOTest.class.getResource("resource.xls").getFile());
+        resList.add(xlsFile);
+
+        File xlsxFile = new File(IOTest.class.getResource("resource.xlsx").getFile());
+        resList.add(xlsxFile);
+        return resList;
+
+    }
     private File createSampleArchive() throws Exception {
 
         // Create CombineArchive at a temporary file that must be deleted after
@@ -74,6 +103,31 @@ public class IOTest {
             File readmeFile = new File(IOTest.class.getResource("README.txt").getFile());
             ArchiveEntry readmeEntry = archive.addEntry(readmeFile, "README.txt", IO.PLAIN_URI);
             readmeEntry.addDescription(new FskMetaDataObject(FskMetaDataObject.ResourceType.readme).metaDataObject);
+
+            // Adds resources
+            File pngFile = new File(IOTest.class.getResource("resource.png").getFile());
+            ArchiveEntry pngEntry = archive.addEntry(pngFile, "resource.png", IO.ResourceType.png.uri);
+
+            File jpegFile = new File(IOTest.class.getResource("resource.jpeg").getFile());
+            ArchiveEntry jpegEntry = archive.addEntry(jpegFile, "resource.jpeg", IO.ResourceType.jpeg.uri);
+
+            File tiffFile = new File(IOTest.class.getResource("resource.tiff").getFile());
+            ArchiveEntry tiffEntry = archive.addEntry(tiffFile, "resource.tiff", IO.ResourceType.tiff.uri);
+
+            File svgFile = new File(IOTest.class.getResource("resource.svg").getFile());
+            ArchiveEntry svgEntry = archive.addEntry(svgFile, "resource.svg", IO.ResourceType.svg.uri);
+
+            File rDataFile = new File(IOTest.class.getResource("resource.rData").getFile());
+            ArchiveEntry rDataEntry = archive.addEntry(rDataFile, "resource.rData", IO.ResourceType.rdata.uri);
+
+            File bmpFile = new File(IOTest.class.getResource("resource.bmp").getFile());
+            ArchiveEntry bmpEntry = archive.addEntry(bmpFile, "resource.bmp", IO.ResourceType.bmp.uri);
+
+            File xlsFile = new File(IOTest.class.getResource("resource.xls").getFile());
+            ArchiveEntry xlsEntry = archive.addEntry(xlsFile, "resource.xls", IO.ResourceType.xls.uri);
+
+            File xlsxFile = new File(IOTest.class.getResource("resource.xlsx").getFile());
+            ArchiveEntry xlsxntry = archive.addEntry(xlsxFile, "resource.xlsx", IO.ResourceType.xlsx.uri);
 
             archive.pack();
         }
