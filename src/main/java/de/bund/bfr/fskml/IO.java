@@ -142,7 +142,7 @@ class IO {
 
                 if (FilenameUtils.isExtension( resourceFile.getName(), "txt")) {
                     combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.txt.uri);
-                } else if (FilenameUtils.isExtension( resourceFile.getName(), "RData")) {
+                } else if (FilenameUtils.isExtension( resourceFile.getName(), "rData")) {
                     combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.rdata.uri);
                 } else if (FilenameUtils.isExtension( resourceFile.getName(), "csv")) {
                     combineArchive.addEntry(resourceFile, resourceFile.getName(), ResourceType.csv.uri);
