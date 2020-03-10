@@ -1,5 +1,6 @@
 package de.bund.bfr.fskml;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.bfr.fskml.sedml.SelectedSimulation;
 import de.bund.bfr.fskml.sedml.SourceScript;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
@@ -8,7 +9,6 @@ import de.unirostock.sems.cbarchive.CombineArchiveException;
 import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
 import de.unirostock.sems.cbarchive.meta.MetaDataObject;
 import org.apache.commons.io.FilenameUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 import org.jdom2.DefaultJDOMFactory;

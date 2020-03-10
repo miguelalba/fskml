@@ -1,8 +1,8 @@
 package de.bund.bfr.fskml;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+import java.util.Collections;
 import java.util.Map;
 
 /*
@@ -14,14 +14,17 @@ this class should only contain the package information so that a json of the pac
     }
 }
  */
+@JsonAutoDetect
 public class PackagesImpl implements Packages {
 
     private final String language;
     private final Map<String, String> packages;
 
+    PackagesImpl() {
+        this("", Collections.emptyMap());
+    }
 
-    @JsonCreator
-    PackagesImpl(@JsonProperty("language")String language, @JsonProperty("packages")Map<String, String> packages) {
+    PackagesImpl(String language, Map<String, String> packages) {
         this.language = language;
         this.packages = packages;
     }
