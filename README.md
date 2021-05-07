@@ -1,7 +1,4 @@
-# fskml
-[![Build Status](https://travis-ci.org/SiLeBAT/fskml.svg?branch=master)](https://travis-ci.org/SiLeBAT/fskml)
-[![Coverage Status](https://coveralls.io/repos/github/SiLeBAT/fskml/badge.svg?branch=master)](https://coveralls.io/github/SiLeBAT/fskml?branch=master)
-
+# fskml [![Java CI](https://github.com/SiLeBAT/fskml/actions/workflows/basic.yml/badge.svg)](https://github.com/SiLeBAT/fskml/actions/workflows/basic.yml)
 Food Safety Knowledge Markup Language
 
 Java library to read/write FSK archives.
