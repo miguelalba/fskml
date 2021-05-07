@@ -7,6 +7,11 @@
     variables are defined in the GitHub workflow -->
     <servers>
         <server>
+            <id>github_fskml</id>
+            <username>${env.USERNAME}</username>
+            <password>${env.PASSWORD}</password>
+        </server>
+        <server>
             <id>github_pmfml</id>
             <username>${env.USERNAME}</username>
             <password>${env.PASSWORD}</password>
