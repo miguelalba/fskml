@@ -1,0 +1,15 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!-- GitHub credentials stored as secrets in the project. These
+    variables are defined in the GitHub workflow -->
+    <servers>
+        <server>
+            <id>github_pmfml</id>
+            <username>${env.USERNAME}</username>
+            <password>${env.PASSWORD}</password>
+        </server>
+    </servers>
+</settings>
