@@ -19,6 +19,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Build with Maven
+        env:
+          USENAME: ${{github.actor}}
+          PASSWORD: ${{ secrets.TOKEN }}
         run: mvn --batch-mode verify --settings settings.xml
 
   test:
